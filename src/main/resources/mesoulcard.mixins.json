@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "package": "com.mesoulcard.mixins",
+  "compatibilityLevel": "JAVA_21",
+  "plugin": "com.mesoulcard.MixinPlugin",
+  "mixins": [
+    "patternprovider.UpgradeablePatternProviderScreenMixin",
+    "patternprovider.UpgradeablePatternProviderMenuMixin",
+    "patternprovider.UpgradeablePatternProviderLogicMixin",
+    "PatternProviderLogicHostMixin",
+    "PatternProviderLogicMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}
