@@ -9,6 +9,7 @@ import appeng.api.upgrades.IUpgradeableObject;
 import appeng.core.settings.TickRates;
 import appeng.helpers.patternprovider.PatternProviderLogic;
 import appeng.helpers.patternprovider.PatternProviderLogicHost;
+import appeng.parts.crafting.PatternProviderPart;
 import com.mesoulcard.common.ISoulDistributor;
 import com.mesoulcard.common.SoulDistributor;
 import com.mesoulcard.core.Registration;
@@ -37,11 +38,16 @@ public class PatternProviderLogicMixin implements IUpgradeableObject, IGridTicka
             at = @At("TAIL")
     )
     private void init(IManagedGridNode node, PatternProviderLogicHost host, int invSize, CallbackInfo ci) {
-        this.distributor = new SoulDistributor(this.mainNode, () ->
-            getUpgrades().isInstalled(Registration.SOUL_CARD.get())
-        );
-        this.mainNode.addService(ISoulDistributor.class, this.distributor);
-        this.mainNode.addService(IGridTickable.class, this);
+        // Should not change the Block version of Pattern Provider. Only Parts can have Soul Distribution.
+        if (host instanceof PatternProviderPart) {
+            PatternProviderPart part = (PatternProviderPart) host;
+            this.distributor = new SoulDistributor(this.mainNode, () ->
+                    getUpgrades().isInstalled(Registration.SOUL_CARD.get()),
+                    part
+            );
+            this.mainNode.addService(ISoulDistributor.class, this.distributor);
+            this.mainNode.addService(IGridTickable.class, this);
+        }
     }
 
     @Override
