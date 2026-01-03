@@ -51,6 +51,11 @@ public class SoulService implements IGridService, IGridServiceProvider {
         }
     }
 
+    @Nullable
+    public ISoulDistributor getDistributor(IGridNode node) {
+        return distributors.get(node);
+    }
+
     public void wake(ISoulDistributor node) {
         this.active.add(node);
     }

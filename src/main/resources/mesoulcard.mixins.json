@@ -8,7 +8,9 @@
     "patternprovider.UpgradeablePatternProviderMenuMixin",
     "patternprovider.UpgradeablePatternProviderLogicMixin",
     "PatternProviderLogicHostMixin",
-    "PatternProviderLogicMixin"
+    "PatternProviderLogicMixin",
+    "PatternProviderPartMixin",
+    "PartExPatternProviderMixin"
   ],
   "injectors": {
     "defaultRequire": 1

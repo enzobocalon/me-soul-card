@@ -12,6 +12,8 @@ public interface ISoulDistributor extends IGridNodeService {
         return true;
     }
 
+    default void updateSleep() {}
+
     default boolean isAwake() {
         return false;
     }

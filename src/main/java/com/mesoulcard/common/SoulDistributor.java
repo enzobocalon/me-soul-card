@@ -52,7 +52,6 @@ public class SoulDistributor implements ISoulDistributor {
         if (tickingTime <= 0) {
             if (!consumeSoulsFromNetwork()) return;
             tickingTime = SOUL_TIME;
-            System.out.println(tickingTime);
         }
 
         if (tickingTime > 0) {
@@ -64,7 +63,6 @@ public class SoulDistributor implements ISoulDistributor {
             }
             if (didAccelerate) {
                 tickingTime -= 1;
-                System.out.println(tickingTime);
             }
         }
     }
