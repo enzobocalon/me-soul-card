@@ -3,14 +3,19 @@ package com.mesoulcard.common;
 import appeng.api.config.Actionable;
 import appeng.api.networking.IManagedGridNode;
 import appeng.api.networking.security.IActionSource;
-import appeng.api.stacks.AEKey;
+import appeng.api.upgrades.IUpgradeInventory;
+import appeng.api.upgrades.IUpgradeableObject;
 import appeng.me.helpers.MachineSource;
 import appeng.parts.AEBasePart;
 import com.buuz135.industrialforegoingsouls.config.ConfigSoulSurge;
 import com.buuz135.soulplied_energistics.applied.SoulKey;
+import com.mesoulcard.common.interfaces.ISoulDistributor;
+import com.mesoulcard.core.Registration;
 import com.mesoulcard.helper.SoulAccelerationHelper;
 import com.mesoulcard.helper.TargetInfo;
+import com.mesoulcard.items.SoulCard;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -34,7 +39,7 @@ public class SoulDistributor implements ISoulDistributor {
 
     private final IActionSource actionSource;
     private static final int SOUL_TIME = ConfigSoulSurge.SOUL_TIME;
-    private static final int ACCELERATION_MULTIPLIER = 6; // for now
+    private int accelerationMultiplier = 1;
 
     private int tickingTime = 0;
 
@@ -58,7 +63,8 @@ public class SoulDistributor implements ISoulDistributor {
             TargetInfo target = this.getTargetInfo();
             if (target == null) return;
             boolean didAccelerate = false;
-            if (SoulAccelerationHelper.accelerate(target.level(), target.pos(), target.state(), ACCELERATION_MULTIPLIER)) {
+            if (SoulAccelerationHelper.accelerate(target.level(), target.pos(), target.state(), accelerationMultiplier)) {
+//                System.out.println("accelerationMultiplier " + accelerationMultiplier);
                 didAccelerate = true;
             }
             if (didAccelerate) {
@@ -92,12 +98,26 @@ public class SoulDistributor implements ISoulDistributor {
 
         long extracted = inv.extract(
                 SoulKey.INSTANCE,
-                ACCELERATION_MULTIPLIER,
+                accelerationMultiplier,
                 Actionable.MODULATE,
                 actionSource
         );
 
         return extracted >= 1;
+    }
+
+    @Override
+    public void setAccelerationMultiplier(int multiplier) {
+        if (multiplier >= 1 && multiplier <= 6) {
+            this.accelerationMultiplier = multiplier;
+        } else if (multiplier > 6) {
+            this.accelerationMultiplier = 1;
+        }
+    }
+
+    @Override
+    public int getAccelerationMultiplier() {
+        return this.accelerationMultiplier;
     }
 
     @Override

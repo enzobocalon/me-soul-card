@@ -5,7 +5,7 @@ import appeng.api.upgrades.*;
 import appeng.helpers.patternprovider.PatternProviderLogic;
 import appeng.helpers.patternprovider.PatternProviderLogicHost;
 import appeng.parts.AEBasePart;
-import com.mesoulcard.common.ISoulDistributor;
+import com.mesoulcard.common.interfaces.ISoulDistributor;
 import com.mesoulcard.common.SoulDistributor;
 import com.mesoulcard.core.Registration;
 import org.spongepowered.asm.mixin.Final;

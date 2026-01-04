@@ -1,6 +1,8 @@
 package com.mesoulcard;
 
 import com.mesoulcard.core.Registration;
+import com.mesoulcard.network.PacketHandler;
+import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -24,12 +26,17 @@ public class MESoulCard {
 
         NeoForge.EVENT_BUS.register(this);
 
+        PacketHandler.init(modEventBus);
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
         Registration.registerUpgrades();
         Registration.registerServices();
+    }
+
+    public static ResourceLocation makeId(String path) {
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
 
     @SubscribeEvent

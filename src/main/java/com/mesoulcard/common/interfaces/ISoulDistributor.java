@@ -1,6 +1,7 @@
-package com.mesoulcard.common;
+package com.mesoulcard.common.interfaces;
 
 import appeng.api.networking.IGridNodeService;
+import com.mesoulcard.common.SoulService;
 import org.jetbrains.annotations.Nullable;
 
 public interface ISoulDistributor extends IGridNodeService {
@@ -21,6 +22,10 @@ public interface ISoulDistributor extends IGridNodeService {
     default boolean isFastMode() {
         return false;
     }
+
+    void setAccelerationMultiplier(int multiplier);
+
+    int getAccelerationMultiplier();
 
     default void setFastMode(boolean mode) {}
 }

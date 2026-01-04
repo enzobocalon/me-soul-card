@@ -8,6 +8,7 @@ import appeng.client.gui.AEBaseScreen;
 import appeng.client.gui.implementations.PatternProviderScreen;
 import appeng.client.gui.style.ScreenStyle;
 import appeng.menu.implementations.PatternProviderMenu;
+import com.mesoulcard.common.interfaces.IAccelerationReceiver;
 import com.mesoulcard.core.Registration;
 import com.mesoulcard.widgets.SoulSurgeButton;
 import net.minecraft.network.chat.Component;
@@ -58,6 +59,15 @@ public abstract class PatternProviderScreenMixin<P extends PatternProviderMenu> 
             lastUpgradeState = currentState;
             this.updateButtonVisibility();
             this.repositionElements();
+        }
+
+        if (menu instanceof IAccelerationReceiver receiver) {
+            int serverValue = receiver.getClientMultiplier();
+            if (soulSurgeButton.getMultiplier() != serverValue) {
+                soulSurgeButton.setMultiplier(serverValue);
+            }
+            soulSurgeButton.setMessage(Component.literal(soulSurgeButton.getMultiplier() + "x"));
+
         }
     }
 

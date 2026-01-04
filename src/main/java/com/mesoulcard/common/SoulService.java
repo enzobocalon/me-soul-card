@@ -1,7 +1,7 @@
 package com.mesoulcard.common;
 
 import appeng.api.networking.*;
-import com.mesoulcard.MESoulCard;
+import com.mesoulcard.common.interfaces.ISoulDistributor;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
