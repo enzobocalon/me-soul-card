@@ -8,6 +8,8 @@ import appeng.parts.AEBasePart;
 import com.mesoulcard.common.interfaces.ISoulDistributor;
 import com.mesoulcard.common.SoulDistributor;
 import com.mesoulcard.core.Registration;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -37,6 +39,23 @@ public class PatternProviderLogicMixin implements IUpgradeableObject {
                     part
             );
             this.mainNode.addService(ISoulDistributor.class, this.distributor);
+        }
+    }
+
+    @Inject(method = "writeToNBT", at = @At("TAIL"), remap = false)
+    private void onSave(CompoundTag tag, HolderLookup.Provider registries, CallbackInfo ci) {
+        if (this.distributor != null) {
+            var distTag = new CompoundTag();
+            this.distributor.writeToNBT(distTag, registries);
+            tag.put("MeSoulCard", distTag);
+        }
+    }
+
+    @Inject(method = "readFromNBT", at = @At("TAIL"), remap = false)
+    private void onLoad(CompoundTag tag, HolderLookup.Provider registries, CallbackInfo ci) {
+        if (this.distributor != null && tag.contains("MeSoulCard")) {
+            var distTag = tag.getCompound("MeSoulCard");
+            this.distributor.readFromNBT(distTag, registries);
         }
     }
 }

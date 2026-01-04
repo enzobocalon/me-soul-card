@@ -15,6 +15,8 @@ import com.mesoulcard.helper.SoulAccelerationHelper;
 import com.mesoulcard.helper.TargetInfo;
 import com.mesoulcard.items.SoulCard;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -64,7 +66,6 @@ public class SoulDistributor implements ISoulDistributor {
             if (target == null) return;
             boolean didAccelerate = false;
             if (SoulAccelerationHelper.accelerate(target.level(), target.pos(), target.state(), accelerationMultiplier)) {
-//                System.out.println("accelerationMultiplier " + accelerationMultiplier);
                 didAccelerate = true;
             }
             if (didAccelerate) {
@@ -112,6 +113,11 @@ public class SoulDistributor implements ISoulDistributor {
             this.accelerationMultiplier = multiplier;
         } else if (multiplier > 6) {
             this.accelerationMultiplier = 1;
+        }
+
+        if (this.part.getHost() != null) {
+            System.out.println("salvou");
+            this.part.getHost().markForSave();
         }
     }
 
@@ -164,4 +170,15 @@ public class SoulDistributor implements ISoulDistributor {
 
         return null;
     }
+
+    public void writeToNBT(CompoundTag tag, HolderLookup.Provider registries) {
+        tag.putInt("soulcard_multiplier", this.accelerationMultiplier);
+    }
+
+    public void readFromNBT(CompoundTag tag, HolderLookup.Provider registries) {
+        if (tag.contains("soulcard_multiplier")) {
+            this.accelerationMultiplier = tag.getInt("soulcard_multiplier");
+        }
+    }
+
 }

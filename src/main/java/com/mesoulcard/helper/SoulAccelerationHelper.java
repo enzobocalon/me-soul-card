@@ -14,6 +14,8 @@ public class SoulAccelerationHelper {
     public static boolean accelerate(Level level, BlockPos pos, BlockState state, int ACCELERATION_MULTIPLIER) {
         if (!level.isLoaded(pos)) return false;
 
+        // TODO: add some type of lock to prevent acceleration scaling up to 36x when using multiple upgrades/souls surges in different faces
+
         if (!state.is(Blocks.AIR) && !state.is(SoulTags.Blocks.CANT_ACCELERATE) && !state.is(SoulTags.Blocks.FORGE_CANT_ACCELERATE)) {
             BlockEntity targetingTile = level.getBlockEntity(pos);
 
