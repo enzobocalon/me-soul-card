@@ -10,7 +10,9 @@
     "PatternProviderLogicHostMixin",
     "PatternProviderLogicMixin",
     "PatternProviderPartMixin",
-    "PartExPatternProviderMixin"
+    "PartExPatternProviderMixin",
+    "PatternProviderScreenMixin",
+    "PatternProviderMenuMixin"
   ],
   "injectors": {
     "defaultRequire": 1
