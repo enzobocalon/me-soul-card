@@ -7,15 +7,20 @@ import net.minecraft.nbt.CompoundTag;
 import org.jetbrains.annotations.Nullable;
 
 public interface ISoulDistributor extends IGridNodeService {
-    default void accelerate() {}
+    default void accelerate() {
+    }
 
-    default void setServiceHost(@Nullable SoulService service) {}
+    default void setServiceHost(@Nullable SoulService service) {
+    }
 
     default boolean isActive() {
         return true;
     }
 
-    default void updateSleep() {}
+    default void updateSleep() {
+    }
+
+    default void cleanup() {}
 
     default boolean isAwake() {
         return false;
@@ -29,8 +34,12 @@ public interface ISoulDistributor extends IGridNodeService {
 
     int getAccelerationMultiplier();
 
-    default void setFastMode(boolean mode) {}
+    default void setFastMode(boolean mode) {
+    }
 
-    default void writeToNBT(CompoundTag tag, HolderLookup.Provider registries) {}
-    default void readFromNBT(CompoundTag tag, HolderLookup.Provider registries) {}
+    default void writeToNBT(CompoundTag tag, HolderLookup.Provider registries) {
+    }
+
+    default void readFromNBT(CompoundTag tag, HolderLookup.Provider registries) {
+    }
 }

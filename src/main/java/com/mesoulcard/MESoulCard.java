@@ -1,5 +1,6 @@
 package com.mesoulcard;
 
+import com.mesoulcard.common.SoulAccelerationManager;
 import com.mesoulcard.core.Registration;
 import com.mesoulcard.network.PacketHandler;
 import net.minecraft.resources.ResourceLocation;
@@ -14,12 +15,16 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.level.ChunkEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 
 @Mod(MESoulCard.MOD_ID)
 public class MESoulCard {
     public static final String MOD_ID = "mesoulcard";
     public static final Logger LOGGER = LogUtils.getLogger();
+    public static final boolean ENABLE_DEBUG_LOGS = false;
+
     public MESoulCard(IEventBus modEventBus, ModContainer modContainer) {
         Registration.init(modEventBus);
         modEventBus.addListener(this::commonSetup);
@@ -40,5 +45,20 @@ public class MESoulCard {
     }
 
     @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {}
+    public void onServerStarting(ServerStartingEvent event) {
+    }
+
+    @SubscribeEvent
+    public void onServerStopping(ServerStoppingEvent event) {
+        // Clear all acceleration locks when server stops
+        SoulAccelerationManager.clearAll();
+    }
+
+    @SubscribeEvent
+    public void onChunkUnload(ChunkEvent.Unload event) {
+        // Clear locks for the unloading chunk to prevent stale cache entries
+        if (!event.getLevel().isClientSide()) {
+            SoulAccelerationManager.clearChunk(event.getChunk().getPos());
+        }
+    }
 }

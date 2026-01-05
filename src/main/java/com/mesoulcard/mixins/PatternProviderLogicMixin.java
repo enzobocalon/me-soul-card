@@ -6,6 +6,7 @@ import appeng.helpers.patternprovider.PatternProviderLogic;
 import appeng.helpers.patternprovider.PatternProviderLogicHost;
 import appeng.parts.AEBasePart;
 import com.mesoulcard.common.interfaces.ISoulDistributor;
+import com.mesoulcard.common.interfaces.ISoulDistributorAccessor;
 import com.mesoulcard.common.SoulDistributor;
 import com.mesoulcard.core.Registration;
 import net.minecraft.core.HolderLookup;
@@ -18,26 +19,22 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin({PatternProviderLogic.class})
-public class PatternProviderLogicMixin implements IUpgradeableObject {
-    @Shadow @Final private IManagedGridNode mainNode;
-
-    @Shadow @Final private PatternProviderLogicHost host;
+@Mixin({ PatternProviderLogic.class })
+public class PatternProviderLogicMixin implements IUpgradeableObject, ISoulDistributorAccessor {
+    @Shadow
+    @Final
+    private IManagedGridNode mainNode;
 
     @Unique
     private SoulDistributor distributor;
 
-    @Inject(
-            method = "<init>*",
-            at = @At("TAIL")
-    )
+    @Inject(method = "<init>*", at = @At("TAIL"))
     private void init(IManagedGridNode node, PatternProviderLogicHost host, int invSize, CallbackInfo ci) {
         // Should not change the Block version of Pattern Provider. Only Parts can have Soul Distribution.
         if (host instanceof AEBasePart part) {
-            this.distributor = new SoulDistributor(this.mainNode, () ->
-                    getUpgrades().isInstalled(Registration.SOUL_CARD.get()),
-                    part
-            );
+            this.distributor = new SoulDistributor(this.mainNode,
+                    () -> getUpgrades().isInstalled(Registration.SOUL_CARD.get()),
+                    part);
             this.mainNode.addService(ISoulDistributor.class, this.distributor);
         }
     }
@@ -57,5 +54,11 @@ public class PatternProviderLogicMixin implements IUpgradeableObject {
             var distTag = tag.getCompound("MeSoulCard");
             this.distributor.readFromNBT(distTag, registries);
         }
+    }
+
+    @Override
+    @Unique
+    public SoulDistributor getDistributor() {
+        return this.distributor;
     }
 }

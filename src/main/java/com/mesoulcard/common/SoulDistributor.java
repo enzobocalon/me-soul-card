@@ -3,21 +3,18 @@ package com.mesoulcard.common;
 import appeng.api.config.Actionable;
 import appeng.api.networking.IManagedGridNode;
 import appeng.api.networking.security.IActionSource;
-import appeng.api.upgrades.IUpgradeInventory;
-import appeng.api.upgrades.IUpgradeableObject;
 import appeng.me.helpers.MachineSource;
 import appeng.parts.AEBasePart;
 import com.buuz135.industrialforegoingsouls.config.ConfigSoulSurge;
 import com.buuz135.soulplied_energistics.applied.SoulKey;
+import com.mesoulcard.MESoulCard;
 import com.mesoulcard.common.interfaces.ISoulDistributor;
-import com.mesoulcard.core.Registration;
 import com.mesoulcard.helper.SoulAccelerationHelper;
 import com.mesoulcard.helper.TargetInfo;
-import com.mesoulcard.items.SoulCard;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -43,7 +40,11 @@ public class SoulDistributor implements ISoulDistributor {
     private static final int SOUL_TIME = ConfigSoulSurge.SOUL_TIME;
     private int accelerationMultiplier = 1;
 
+    private BlockPos lastTargetPos = null;
     private int tickingTime = 0;
+
+    // Cached distributor ID - computed once, never changes after construction
+    private String cachedDistributorId = null;
 
     public SoulDistributor(IManagedGridNode mainNode, BooleanSupplier hasUpgrade, AEBasePart part) {
         this.mainNode = mainNode;
@@ -54,46 +55,108 @@ public class SoulDistributor implements ISoulDistributor {
 
     @Override
     public void accelerate() {
-        if (!hasUpgrade.getAsBoolean()) return;
+        if (!hasUpgrade.getAsBoolean()) {
+            releaseCurrentLock();
+            return;
+        }
 
+        TargetInfo target = this.getTargetInfo();
+        if (target == null) {
+            releaseCurrentLock();
+            return;
+        }
+
+        // Check if target is valid (has a block entity that can be accelerated) before
+        // acquiring lock
+        if (!isValidTarget(target)) {
+            releaseCurrentLock();
+            return;
+        }
+
+        String myId = getDistributorId();
+
+        // Fast cache check - does not access NBT every tick
+        if (!SoulAccelerationManager.tryAcquire(target.level(), target.pos(), myId)) {
+            // Blocked by another distributor - do not accelerate
+            tickingTime = 0;
+            return;
+        }
+
+        // Successfully acquired or already own the lock
+        lastTargetPos = target.pos();
+        tickAccelerate(target);
+    }
+
+    private boolean isValidTarget(TargetInfo target) {
+        if (!target.level().isLoaded(target.pos())) {
+            return false;
+        }
+
+        BlockState state = target.state();
+        if (state.isAir()) {
+            return false;
+        }
+
+        // Check if there's a block entity with a ticker
+        BlockEntity be = target.level().getBlockEntity(target.pos());
+        return be != null;
+    }
+
+    private void tickAccelerate(TargetInfo target) {
         if (tickingTime <= 0) {
-            if (!consumeSoulsFromNetwork()) return;
+            if (!consumeSoulsFromNetwork()) {
+                releaseCurrentLock();
+                return;
+            }
             tickingTime = SOUL_TIME;
         }
 
         if (tickingTime > 0) {
-            TargetInfo target = this.getTargetInfo();
-            if (target == null) return;
-            boolean didAccelerate = false;
-            if (SoulAccelerationHelper.accelerate(target.level(), target.pos(), target.state(), accelerationMultiplier)) {
-                didAccelerate = true;
-            }
+            boolean didAccelerate = SoulAccelerationHelper.accelerate(
+                    target.level(),
+                    target.pos(),
+                    target.state(),
+                    accelerationMultiplier);
+
             if (didAccelerate) {
                 tickingTime -= 1;
+            } else {
+                releaseCurrentLock();
             }
         }
     }
 
-    private long getAvailableSouls() {
-        if (!this.mainNode.isActive()) return 0;
-        var grid = this.mainNode.getGrid();
-        if (grid == null) return 0;
-        var storageService = grid.getStorageService();
-        if (storageService == null) return 0;
+    private String getDistributorId() {
+        if (cachedDistributorId == null) {
+            BlockPos pos = this.part.getBlockEntity().getBlockPos();
+            Direction side = this.part.getSide();
+            cachedDistributorId = pos.toShortString() + "_" + side.getName();
+        }
+        return cachedDistributorId;
+    }
 
-        var inv = storageService.getInventory();
-        var availableStacks = inv.getAvailableStacks();
+    private void releaseCurrentLock() {
+        if (lastTargetPos == null)
+            return;
 
-        return availableStacks.get(SoulKey.INSTANCE);
+        Level level = this.part.getLevel();
+        if (level == null || level.isClientSide)
+            return;
+
+        SoulAccelerationManager.release(level, lastTargetPos, getDistributorId());
+        lastTargetPos = null;
     }
 
     private boolean consumeSoulsFromNetwork() {
-        if (!this.mainNode.isActive()) return false;
+        if (!this.mainNode.isActive())
+            return false;
         var grid = this.mainNode.getGrid();
-        if (grid == null) return false;
+        if (grid == null)
+            return false;
 
         var storageService = grid.getStorageService();
-        if (storageService == null) return false;
+        if (storageService == null)
+            return false;
 
         var inv = storageService.getInventory();
 
@@ -101,8 +164,7 @@ public class SoulDistributor implements ISoulDistributor {
                 SoulKey.INSTANCE,
                 accelerationMultiplier,
                 Actionable.MODULATE,
-                actionSource
-        );
+                actionSource);
 
         return extracted >= 1;
     }
@@ -116,7 +178,6 @@ public class SoulDistributor implements ISoulDistributor {
         }
 
         if (this.part.getHost() != null) {
-            System.out.println("salvou");
             this.part.getHost().markForSave();
         }
     }
@@ -149,8 +210,15 @@ public class SoulDistributor implements ISoulDistributor {
                 this.service.wake(this);
             } else {
                 this.service.sleep(this);
+                System.out.println("chamou sleep!");
+                releaseCurrentLock(); // Also release lock when going to sleep (upgrade removed)
             }
         }
+    }
+
+    @Override
+    public void cleanup() {
+        releaseCurrentLock();
     }
 
     private TargetInfo getTargetInfo() {
@@ -160,7 +228,8 @@ public class SoulDistributor implements ISoulDistributor {
 
         if (this.targetEntity != null) {
             Level level = this.targetEntity.getLevel();
-            if (level == null) return null;
+            if (level == null)
+                return null;
 
             BlockPos targetPos = this.targetEntity.getBlockPos().relative(this.part.getSide());
             BlockState state = level.getBlockState(targetPos);
@@ -180,5 +249,4 @@ public class SoulDistributor implements ISoulDistributor {
             this.accelerationMultiplier = tag.getInt("soulcard_multiplier");
         }
     }
-
 }

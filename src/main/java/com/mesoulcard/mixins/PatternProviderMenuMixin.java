@@ -6,6 +6,7 @@ import appeng.menu.AEBaseMenu;
 import appeng.menu.implementations.PatternProviderMenu;
 import appeng.parts.AEBasePart;
 import com.mesoulcard.common.interfaces.IAccelerationReceiver;
+import com.mesoulcard.common.interfaces.ISoulDistributorAccessor;
 import com.mesoulcard.common.SoulService;
 import com.mesoulcard.network.payloads.SyncAccelerationPacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,13 +21,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin({PatternProviderMenu.class})
+@Mixin({ PatternProviderMenu.class })
 public class PatternProviderMenuMixin extends AEBaseMenu implements IAccelerationReceiver {
 
     @Unique
     private int clientMultiplier = 1;
 
-    public PatternProviderMenuMixin(MenuType<?> menuType, int id, Inventory playerInventory, PatternProviderLogicHost host) {
+    public PatternProviderMenuMixin(MenuType<?> menuType, int id, Inventory playerInventory,
+            PatternProviderLogicHost host) {
         super(menuType, id, playerInventory, host);
     }
 
@@ -37,60 +39,71 @@ public class PatternProviderMenuMixin extends AEBaseMenu implements IAcceleratio
     @Inject(method = "broadcastChanges", at = @At("TAIL"))
     private void broadcastChanges(CallbackInfo ci) {
         if (!this.getPlayer().level().isClientSide()) {
-            var host = this.getActionHost();
-            if (host instanceof AEBasePart part) {
-                var mainNode = part.getMainNode();
-                if (mainNode.isActive()) {
-                    var grid = mainNode.getGrid();
-                    if (grid != null) {
-                        var service = grid.getService(SoulService.class);
-                        if (service != null) {
-                            var dist = service.getDistributor(mainNode.getNode());
-                            if (dist != null) {
-                                int currentMultiplier = dist.getAccelerationMultiplier();
-                                if (this.getPlayer() instanceof ServerPlayer serverPlayer) {
-                                    PacketDistributor.sendToPlayer(serverPlayer,
-                                            new SyncAccelerationPacket(currentMultiplier));
-                                }
-                            }
-                        }
-                    }
-                }
+            int currentMultiplier = getMultiplier();
+
+            if (this.getPlayer() instanceof ServerPlayer serverPlayer) {
+                PacketDistributor.sendToPlayer(serverPlayer,
+                        new SyncAccelerationPacket(currentMultiplier));
             }
         }
+    }
+
+    @Unique
+    private int getMultiplier() {
+        if (this.logic instanceof ISoulDistributorAccessor accessor) {
+            var distributor = accessor.getDistributor();
+            if (distributor != null) {
+                return distributor.getAccelerationMultiplier();
+            }
+        }
+
+        // Fallback to grid service
+        var host = this.getActionHost();
+        if (!(host instanceof AEBasePart part)) return 1;
+
+        var mainNode = part.getMainNode();
+        if (!mainNode.isActive()) return 1;
+
+        var grid = mainNode.getGrid();
+        if (grid == null) return 1;
+
+        var service = grid.getService(SoulService.class);
+        if (service == null) return 1;
+
+        var distributor = service.getDistributor(mainNode.getNode());
+        if (distributor == null)  return 1;
+
+        return distributor.getAccelerationMultiplier();
     }
 
     @Override
     @Unique
     public void receiveStates(int multiplier) {
-        var host = this.getActionHost();
-        if (!(host instanceof AEBasePart part)) {
-            return;
+        if (this.logic instanceof ISoulDistributorAccessor accessor) {
+            var distributor = accessor.getDistributor();
+            if (distributor != null) {
+                distributor.setAccelerationMultiplier(multiplier);
+                return;
+            }
         }
+
+        // Fallback to grid service
+        var host = this.getActionHost();
+        if (!(host instanceof AEBasePart part)) return;
 
         var mainNode = part.getMainNode();
-        if (!mainNode.isActive()) {
-            return;
-        }
+        if (!mainNode.isActive()) return;
 
         var grid = mainNode.getGrid();
-        if (grid == null) {
-            return;
-        }
+        if (grid == null) return;
 
         var service = grid.getService(SoulService.class);
-        if (service == null) {
-            return;
-        }
+        if (service == null) return;
 
-        var gridNode = mainNode.getNode();
-        var dist = service.getDistributor(gridNode);
+        var distributor = service.getDistributor(mainNode.getNode());
+        if (distributor == null) return;
 
-        if (dist == null) {
-            return;
-        }
-
-        dist.setAccelerationMultiplier(multiplier);
+        distributor.setAccelerationMultiplier(multiplier);
     }
 
     @Override

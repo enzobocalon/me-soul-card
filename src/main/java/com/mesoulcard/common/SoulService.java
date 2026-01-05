@@ -16,7 +16,8 @@ public class SoulService implements IGridService, IGridServiceProvider {
     private final Set<ISoulDistributor> active = Collections.newSetFromMap(new IdentityHashMap<>());
     private long tickCount = 0;
 
-    public SoulService() {}
+    public SoulService() {
+    }
 
     @Override
     public void onServerStartTick() {
@@ -28,6 +29,8 @@ public class SoulService implements IGridService, IGridServiceProvider {
         for (var dis : this.active) {
             if (dis.isActive()) {
                 dis.accelerate();
+            } else {
+                dis.cleanup();
             }
         }
     }
@@ -43,8 +46,9 @@ public class SoulService implements IGridService, IGridServiceProvider {
 
     @Override
     public void removeNode(IGridNode gridNode) {
-        var node = distributors.get(gridNode);
+        ISoulDistributor node = distributors.get(gridNode);
         if (node != null) {
+            node.cleanup(); // lock cleanup
             node.setServiceHost(null);
             active.remove(node);
             this.distributors.remove(gridNode);

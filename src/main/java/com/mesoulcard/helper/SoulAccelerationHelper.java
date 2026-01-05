@@ -12,11 +12,11 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class SoulAccelerationHelper {
     public static boolean accelerate(Level level, BlockPos pos, BlockState state, int ACCELERATION_MULTIPLIER) {
-        if (!level.isLoaded(pos)) return false;
+        if (!level.isLoaded(pos))
+            return false;
 
-        // TODO: add some type of lock to prevent acceleration scaling up to 36x when using multiple upgrades/souls surges in different faces
-
-        if (!state.is(Blocks.AIR) && !state.is(SoulTags.Blocks.CANT_ACCELERATE) && !state.is(SoulTags.Blocks.FORGE_CANT_ACCELERATE)) {
+        if (!state.is(Blocks.AIR) && !state.is(SoulTags.Blocks.CANT_ACCELERATE)
+                && !state.is(SoulTags.Blocks.FORGE_CANT_ACCELERATE)) {
             BlockEntity targetingTile = level.getBlockEntity(pos);
 
             if (targetingTile != null) {
@@ -28,7 +28,7 @@ public class SoulAccelerationHelper {
                     }
                     return true;
                 }
-            }  else if (level instanceof ServerLevel serverLevel) {
+            } else if (level instanceof ServerLevel serverLevel) {
                 if (serverLevel.random.nextDouble() < ConfigSoulSurge.RANDOM_TICK_ACCELERATION_CHANCE) {
                     for (int i = 0; i < ACCELERATION_MULTIPLIER; i++) {
                         state.randomTick(serverLevel, pos, serverLevel.random);
