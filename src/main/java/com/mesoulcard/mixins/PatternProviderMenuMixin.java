@@ -27,6 +27,9 @@ public class PatternProviderMenuMixin extends AEBaseMenu implements IAcceleratio
     @Unique
     private int clientMultiplier = 1;
 
+    @Unique
+    private boolean clientLock = false;
+
     public PatternProviderMenuMixin(MenuType<?> menuType, int id, Inventory playerInventory,
             PatternProviderLogicHost host) {
         super(menuType, id, playerInventory, host);
@@ -40,13 +43,15 @@ public class PatternProviderMenuMixin extends AEBaseMenu implements IAcceleratio
     private void broadcastChanges(CallbackInfo ci) {
         if (!this.getPlayer().level().isClientSide()) {
             int currentMultiplier = getMultiplier();
+            boolean currentLocked = isLocked();
 
             if (this.getPlayer() instanceof ServerPlayer serverPlayer) {
                 PacketDistributor.sendToPlayer(serverPlayer,
-                        new SyncAccelerationPacket(currentMultiplier));
+                        new SyncAccelerationPacket(currentMultiplier, currentLocked));
             }
         }
     }
+
 
     @Unique
     private int getMultiplier() {
@@ -76,6 +81,37 @@ public class PatternProviderMenuMixin extends AEBaseMenu implements IAcceleratio
         return distributor.getAccelerationMultiplier();
     }
 
+    @Unique
+    private boolean isLocked() {
+        if (this.logic instanceof ISoulDistributorAccessor accessor) {
+            var distributor = accessor.getDistributor();
+            if (distributor != null) {
+                return distributor.isLocked();
+            }
+        }
+
+        // Fallback to grid service
+        var host = this.getActionHost();
+        if (!(host instanceof AEBasePart part)) return false;
+
+        var mainNode = part.getMainNode();
+        if (!mainNode.isActive()) return false;
+
+        var grid = mainNode.getGrid();
+        if (grid == null) return false;
+
+        var service = grid.getService(SoulService.class);
+        if (service == null) return false;
+
+        var distributor = service.getDistributor(mainNode.getNode());
+        if (distributor == null) return false;
+
+        return distributor.isLocked();
+    }
+
+    /*
+    * Receive from client in server
+    * */
     @Override
     @Unique
     public void receiveStates(int multiplier) {
@@ -106,14 +142,24 @@ public class PatternProviderMenuMixin extends AEBaseMenu implements IAcceleratio
         distributor.setAccelerationMultiplier(multiplier);
     }
 
+
+    /*
+    * Receive from server in client
+    * */
     @Override
-    public void receiveClientSync(int multiplier) {
+    public void receiveClientSync(int multiplier, boolean locked) {
         this.clientMultiplier = multiplier;
+        this.clientLock = locked;
     }
 
     @Override
     public int getClientMultiplier() {
         return this.clientMultiplier;
+    }
+
+    @Override
+    public boolean getClientLockStatus() {
+        return this.clientLock;
     }
 
 }

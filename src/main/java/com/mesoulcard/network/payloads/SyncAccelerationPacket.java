@@ -9,11 +9,12 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 // Server -> Client
-public record SyncAccelerationPacket(int value) implements CustomPacketPayload {
+public record SyncAccelerationPacket(int value, boolean locked) implements CustomPacketPayload {
     public static final Type<SyncAccelerationPacket> TYPE = new Type<>(MESoulCard.makeId("sync_acceleration"));
 
     public static final StreamCodec<ByteBuf, SyncAccelerationPacket> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.VAR_INT, SyncAccelerationPacket::value,
+            ByteBufCodecs.BOOL, SyncAccelerationPacket::locked,
             SyncAccelerationPacket::new
     );
 
@@ -26,7 +27,7 @@ public record SyncAccelerationPacket(int value) implements CustomPacketPayload {
         context.enqueueWork(() -> {
             var player = context.player();
             if (player.containerMenu instanceof IAccelerationReceiver receiver) {
-                receiver.receiveClientSync(packet.value());
+                receiver.receiveClientSync(packet.value(), packet.locked());
             }
         });
     }

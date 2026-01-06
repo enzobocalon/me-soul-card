@@ -12,7 +12,8 @@
     "PatternProviderPartMixin",
     "PartExPatternProviderMixin",
     "PatternProviderScreenMixin",
-    "PatternProviderMenuMixin"
+    "PatternProviderMenuMixin",
+    "SoulSurgeBlockEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -63,6 +63,9 @@ public abstract class PatternProviderScreenMixin<P extends PatternProviderMenu> 
 
         if (menu instanceof IAccelerationReceiver receiver) {
             int serverValue = receiver.getClientMultiplier();
+            boolean clientLockStatus = receiver.getClientLockStatus();
+            // TODO: handle client lock status
+            System.out.println("client lock status " + clientLockStatus);
             if (soulSurgeButton.getMultiplier() != serverValue) {
                 soulSurgeButton.setMultiplier(serverValue);
             }

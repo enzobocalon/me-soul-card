@@ -43,7 +43,6 @@ public class SoulDistributor implements ISoulDistributor {
     private BlockPos lastTargetPos = null;
     private int tickingTime = 0;
 
-    // Cached distributor ID - computed once, never changes after construction
     private String cachedDistributorId = null;
 
     public SoulDistributor(IManagedGridNode mainNode, BooleanSupplier hasUpgrade, AEBasePart part) {
@@ -66,8 +65,7 @@ public class SoulDistributor implements ISoulDistributor {
             return;
         }
 
-        // Check if target is valid (has a block entity that can be accelerated) before
-        // acquiring lock
+        // Check if target is valid (has a block entity that can be accelerated)
         if (!isValidTarget(target)) {
             releaseCurrentLock();
             return;
@@ -75,14 +73,11 @@ public class SoulDistributor implements ISoulDistributor {
 
         String myId = getDistributorId();
 
-        // Fast cache check - does not access NBT every tick
         if (!SoulAccelerationManager.tryAcquire(target.level(), target.pos(), myId)) {
-            // Blocked by another distributor - do not accelerate
             tickingTime = 0;
             return;
         }
 
-        // Successfully acquired or already own the lock
         lastTargetPos = target.pos();
         tickAccelerate(target);
     }
@@ -150,6 +145,7 @@ public class SoulDistributor implements ISoulDistributor {
     private boolean consumeSoulsFromNetwork() {
         if (!this.mainNode.isActive())
             return false;
+
         var grid = this.mainNode.getGrid();
         if (grid == null)
             return false;
@@ -159,7 +155,6 @@ public class SoulDistributor implements ISoulDistributor {
             return false;
 
         var inv = storageService.getInventory();
-
         long extracted = inv.extract(
                 SoulKey.INSTANCE,
                 accelerationMultiplier,
@@ -210,10 +205,14 @@ public class SoulDistributor implements ISoulDistributor {
                 this.service.wake(this);
             } else {
                 this.service.sleep(this);
-                System.out.println("chamou sleep!");
-                releaseCurrentLock(); // Also release lock when going to sleep (upgrade removed)
+                releaseCurrentLock();
             }
         }
+    }
+
+    @Override
+    public boolean isLocked() {
+        return this.lastTargetPos == null;
     }
 
     @Override
