@@ -1,4 +1,4 @@
-package com.mesoulcard.mixins;
+package com.mesoulcard.mixins.compat.pprovider;
 
 import com.glodblock.github.extendedae.common.parts.PartExPatternProvider;
 import com.mesoulcard.helper.PatternProviderMixinHelper;

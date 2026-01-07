@@ -1,4 +1,4 @@
-package com.mesoulcard.mixins.patternprovider;
+package com.mesoulcard.mixins.upgradeable.pprovider;
 
 import appeng.api.networking.IManagedGridNode;
 import appeng.api.upgrades.IUpgradeInventory;
@@ -9,7 +9,9 @@ import appeng.helpers.patternprovider.PatternProviderLogicHost;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,12 +22,17 @@ import java.util.List;
 @Mixin({PatternProviderLogic.class})
 public class UpgradeablePatternProviderLogicMixin implements IUpgradeableObject {
 
+    @Final
+    @Shadow
+    private PatternProviderLogicHost host;
+
     @Unique
     private IUpgradeInventory upgrades = UpgradeInventories.empty();
 
     @Unique
     private void onUpgradesChanged() {
-        // TODO: Handle upgrade changes if necessary
+        this.host.saveChanges();
+        this.host.getBlockEntity().invalidateCapabilities();
     }
 
     @Override

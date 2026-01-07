@@ -14,27 +14,32 @@ import java.util.Set;
 
 public class MixinPlugin implements IMixinConfigPlugin {
 
+    // Disabled when B mods are loaded
     public static final Object2ObjectMap<String, List<String>> mixinMapDisableUpgradeablePPMixins = new Object2ObjectOpenHashMap<>(
-            new String[]{
-                    "com.mesoulcard.mixins.patternprovider.UpgradeablePatternProviderLogicMixin",
-                    "com.mesoulcard.mixins.patternprovider.UpgradeablePatternProviderScreenMixin",
-                    "com.mesoulcard.mixins.patternprovider.UpgradeablePatternProviderMenuMixin"
+            new String[] {
+                    "com.mesoulcard.mixins.upgradeable.pprovider.UpgradeablePatternProviderLogicMixin",
+                    "com.mesoulcard.mixins.upgradeable.pprovider.UpgradeablePatternProviderScreenMixin",
+                    "com.mesoulcard.mixins.upgradeable.pprovider.UpgradeablePatternProviderMenuMixin",
+                    "com.mesoulcard.mixins.MixinScreenStyle"
             },
-            new List[]{
+            new List[] {
+                    List.of("expandedae", "appflux", "pccard"),
                     List.of("expandedae", "appflux", "pccard"),
                     List.of("expandedae", "appflux", "pccard"),
                     List.of("expandedae", "appflux", "pccard")
-            }
-    );
+            });
 
-    public static final Object2ObjectMap<String, List<String>> mixinMap = new Object2ObjectOpenHashMap<>(
-            new String[]{
-                    "com.mesoulcard.mixins.PatternProviderLogicMixin",
+    // Enabled when B mods are loaded
+    public static final Object2ObjectMap<String, String> mixinMapEnableCompat = new Object2ObjectOpenHashMap<>(
+            new String[] {
+                    "com.mesoulcard.mixins.compat.pprovider.screens.AppFluxPatternProviderScreenMixin",
+                    "com.mesoulcard.mixins.compat.pprovider.screens.ExpandedAEPatternProviderScreenMixin"
             },
-            new List[]{
-                    List.of("expandedae", "appflux", "pccard"),
-            }
-    );
+            new String[] {
+                    "appflux",
+                    "expandedae"
+            });
+
 
     private boolean isModLoaded(String modId) {
         if (ModList.get() == null) {
@@ -62,8 +67,8 @@ public class MixinPlugin implements IMixinConfigPlugin {
             return mixinMapDisableUpgradeablePPMixins.get(mixinClassName).stream().noneMatch(this::isModLoaded);
         }
 
-        if (mixinMap.containsKey(mixinClassName)) {
-            return mixinMap.get(mixinClassName).stream().anyMatch(this::isModLoaded);
+        if (mixinMapEnableCompat.containsKey(mixinClassName)) {
+            return isModLoaded(mixinMapEnableCompat.get(mixinClassName));
         }
 
         return true;

@@ -1,4 +1,4 @@
-package com.mesoulcard.mixins;
+package com.mesoulcard.mixins.pprovider;
 
 import appeng.helpers.patternprovider.PatternProviderLogic;
 import appeng.helpers.patternprovider.PatternProviderLogicHost;

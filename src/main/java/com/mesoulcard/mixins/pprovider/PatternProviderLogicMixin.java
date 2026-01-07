@@ -1,4 +1,4 @@
-package com.mesoulcard.mixins;
+package com.mesoulcard.mixins.pprovider;
 
 import appeng.api.networking.IManagedGridNode;
 import appeng.api.upgrades.*;

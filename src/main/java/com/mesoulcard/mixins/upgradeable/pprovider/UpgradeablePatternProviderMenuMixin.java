@@ -1,4 +1,4 @@
-package com.mesoulcard.mixins.patternprovider;
+package com.mesoulcard.mixins.upgradeable.pprovider;
 
 import appeng.api.upgrades.IUpgradeInventory;
 import appeng.api.upgrades.IUpgradeableObject;

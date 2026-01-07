@@ -23,7 +23,7 @@ import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 public class MESoulCard {
     public static final String MOD_ID = "mesoulcard";
     public static final Logger LOGGER = LogUtils.getLogger();
-    public static final boolean ENABLE_DEBUG_LOGS = false;
+    public static final boolean ENABLE_DEBUG_LOGS = true;
 
     public MESoulCard(IEventBus modEventBus, ModContainer modContainer) {
         Registration.init(modEventBus);
