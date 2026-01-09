@@ -6,12 +6,11 @@ import appeng.client.gui.widgets.IconButton;
 import com.mesoulcard.network.payloads.AccelerationPacket;
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.network.PacketDistributor;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
 
-public class SoulSurgeButton extends IconButton implements ITooltip {
+public class SoulSurgeButton extends SCIconButton implements ITooltip {
     int currentMultiplier = 1;
     private List<Component> tooltip = Collections.emptyList();
 
@@ -53,7 +52,13 @@ public class SoulSurgeButton extends IconButton implements ITooltip {
     }
 
     @Override
-    protected Icon getIcon() {
-        return null;
+    protected SCIcon getIcon() {
+        SCIcon icon = switch (currentMultiplier) {
+            case 1 -> SCIcon.ONE;
+            case 2 -> SCIcon.TWO;
+            default -> SCIcon.ONE;
+        };
+
+        return icon;
     }
 }
