@@ -1,8 +1,6 @@
 package com.mesoulcard.widgets;
 
-import appeng.client.gui.Icon;
 import appeng.client.gui.widgets.ITooltip;
-import appeng.client.gui.widgets.IconButton;
 import com.mesoulcard.network.payloads.AccelerationPacket;
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -53,12 +51,13 @@ public class SoulSurgeButton extends SCIconButton implements ITooltip {
 
     @Override
     protected SCIcon getIcon() {
-        SCIcon icon = switch (currentMultiplier) {
-            case 1 -> SCIcon.ONE;
+        return switch (currentMultiplier) {
             case 2 -> SCIcon.TWO;
+            case 3 -> SCIcon.THREE;
+            case 4 -> SCIcon.FOUR;
+            case 5 -> SCIcon.FIVE;
+            case 6 -> SCIcon.SIX;
             default -> SCIcon.ONE;
         };
-
-        return icon;
     }
 }

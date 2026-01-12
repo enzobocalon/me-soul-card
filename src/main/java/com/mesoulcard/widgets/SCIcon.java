@@ -6,7 +6,11 @@ import net.minecraft.resources.ResourceLocation;
 
 public enum SCIcon {
     ONE(0, 0),
-    TWO(16, 0);
+    TWO(16, 0),
+    THREE(32, 0),
+    FOUR(48, 0),
+    FIVE(64, 0),
+    SIX(80, 0);
 
     public final int x;
     public final int y;
