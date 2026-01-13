@@ -1,11 +1,12 @@
-package com.mesoulcard.mixins.pprovider;
+package com.mesoulcard.mixins.io;
 
-import appeng.client.gui.AEBaseScreen;
-import appeng.client.gui.implementations.PatternProviderScreen;
+import appeng.client.gui.implementations.IOBusScreen;
+import appeng.client.gui.implementations.UpgradeableScreen;
 import appeng.client.gui.style.ScreenStyle;
-import appeng.menu.implementations.PatternProviderMenu;
+import appeng.menu.implementations.IOBusMenu;
 import com.mesoulcard.common.interfaces.IAccelerationReceiver;
 import com.mesoulcard.core.Registration;
+import com.mesoulcard.helper.IPatternProviderScreenAccessor;
 import com.mesoulcard.helper.IUpgradableMenu;
 import com.mesoulcard.widgets.SoulSurgeButton;
 import net.minecraft.ChatFormatting;
@@ -20,27 +21,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 
-import com.mesoulcard.helper.IPatternProviderScreenAccessor;
-
-@Mixin({ PatternProviderScreen.class })
-public abstract class PatternProviderScreenMixin<P extends PatternProviderMenu> extends AEBaseScreen<P> {
-
-    @Shadow
-    protected abstract void updateBeforeRender();
-
+@Mixin(IOBusScreen.class)
+public class IOBusScreenMixin extends UpgradeableScreen<IOBusMenu> {
     @Unique
     private boolean lastUpgradeState = false;
 
     @Unique
     private SoulSurgeButton soulSurgeButton;
 
-    public PatternProviderScreenMixin(P menu, Inventory playerInventory, Component title, ScreenStyle style) {
+    public IOBusScreenMixin(IOBusMenu menu, Inventory playerInventory, Component title, ScreenStyle style) {
         super(menu, playerInventory, title, style);
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void onInit(PatternProviderMenu menu, Inventory inv, Component title, ScreenStyle style, CallbackInfo ci) {
-
+    private void onInit(IOBusMenu menu, Inventory playerInventory, Component title, ScreenStyle style, CallbackInfo ci) {
         soulSurgeButton = new SoulSurgeButton(btn -> {
             System.out.println("Soul Surge Button Called");
         });
@@ -90,9 +84,7 @@ public abstract class PatternProviderScreenMixin<P extends PatternProviderMenu> 
             return accessor.mesoulcard$hasUpgradeInstalled(Registration.SOUL_CARD.get());
         }
 
-
-
-        if (menu instanceof IUpgradableMenu upgradableMenu) {
+        if (menu instanceof IOBusMenu upgradableMenu) {
             return upgradableMenu.hasUpgrade(Registration.SOUL_CARD.get());
         }
 

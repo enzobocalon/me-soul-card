@@ -4,24 +4,29 @@
   "compatibilityLevel": "JAVA_21",
   "plugin": "com.mesoulcard.MixinPlugin",
   "mixins": [
-    "upgradeable.pprovider.UpgradeablePatternProviderScreenMixin",
-    "upgradeable.pprovider.UpgradeablePatternProviderMenuMixin",
-    "upgradeable.pprovider.UpgradeablePatternProviderLogicMixin",
+    "MixinScreenStyle",
+    "SoulSurgeBlockEntityMixin",
+    "compat.pprovider.PartExPatternProviderMixin",
+    "io.IOBusMenuMixin",
+    "io.IOBusPartMixin",
     "pprovider.PatternProviderLogicHostMixin",
     "pprovider.PatternProviderLogicMixin",
-    "pprovider.PatternProviderPartMixin",
-    "compat.pprovider.PartExPatternProviderMixin",
-    "pprovider.PatternProviderScreenMixin",
     "pprovider.PatternProviderMenuMixin",
-    "SoulSurgeBlockEntityMixin",
-    "compat.pprovider.screens.AppFluxPatternProviderScreenMixin",
-    "compat.pprovider.screens.ExpandedAEPatternProviderScreenMixin",
-    "MixinScreenStyle"
+    "pprovider.PatternProviderPartMixin",
+    "upgradeable.pprovider.UpgradeablePatternProviderLogicMixin",
+    "upgradeable.pprovider.UpgradeablePatternProviderMenuMixin"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "overwrites": {
     "requireAnnotations": true
-  }
+  },
+  "client": [
+    "io.IOBusScreenMixin",
+    "pprovider.PatternProviderScreenMixin",
+    "upgradeable.pprovider.UpgradeablePatternProviderScreenMixin",
+    "compat.pprovider.screens.AppFluxPatternProviderScreenMixin",
+    "compat.pprovider.screens.ExpandedAEPatternProviderScreenMixin"
+  ]
 }
