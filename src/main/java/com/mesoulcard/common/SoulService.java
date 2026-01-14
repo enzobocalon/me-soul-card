@@ -14,14 +14,8 @@ import java.util.Set;
 public class SoulService implements IGridService, IGridServiceProvider {
     private final Map<IGridNode, ISoulDistributor> distributors = new IdentityHashMap<>();
     private final Set<ISoulDistributor> active = Collections.newSetFromMap(new IdentityHashMap<>());
-    private long tickCount = 0;
 
     public SoulService() {
-    }
-
-    @Override
-    public void onServerStartTick() {
-        tickCount++;
     }
 
     @Override

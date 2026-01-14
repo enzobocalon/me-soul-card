@@ -37,6 +37,7 @@ public class Registration {
         Upgrades.add(SOUL_CARD, AEParts.EXPORT_BUS, 1);
         Upgrades.add(SOUL_CARD, AEParts.IMPORT_BUS, 1);
         Upgrades.add(SOUL_CARD, AEParts.STORAGE_BUS, 1);
+
         if (ModList.get().isLoaded("extendedae")) {
             EAELoader.registerUpgradesInEAEParts(SOUL_CARD);
         }

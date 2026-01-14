@@ -7,7 +7,7 @@
     "MixinScreenStyle",
     "SoulSurgeBlockEntityMixin",
     "compat.pprovider.PartExPatternProviderMixin",
-    "io.IOBusMenuMixin",
+    "upgradeable.UpgradeableMenuMixin",
     "io.IOBusPartMixin",
     "pprovider.PatternProviderLogicHostMixin",
     "pprovider.PatternProviderLogicMixin",
@@ -27,6 +27,7 @@
     "pprovider.PatternProviderScreenMixin",
     "upgradeable.pprovider.UpgradeablePatternProviderScreenMixin",
     "compat.pprovider.screens.AppFluxPatternProviderScreenMixin",
-    "compat.pprovider.screens.ExpandedAEPatternProviderScreenMixin"
+    "compat.pprovider.screens.ExpandedAEPatternProviderScreenMixin",
+    "compat.io.extendedae.GuiExIOBusMixin"
   ]
 }

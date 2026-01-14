@@ -1,9 +1,8 @@
-package com.mesoulcard.helper;
+package com.mesoulcard.common.interfaces;
 
 import appeng.api.upgrades.IUpgradeInventory;
 import appeng.menu.ToolboxMenu;
 import net.minecraft.world.level.ItemLike;
-import org.jetbrains.annotations.Nullable;
 
 public interface IUpgradableMenu {
     ToolboxMenu getToolbox();

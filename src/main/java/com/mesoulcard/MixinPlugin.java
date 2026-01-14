@@ -33,11 +33,13 @@ public class MixinPlugin implements IMixinConfigPlugin {
     public static final Object2ObjectMap<String, String> mixinMapEnableCompat = new Object2ObjectOpenHashMap<>(
             new String[] {
                     "com.mesoulcard.mixins.compat.pprovider.screens.AppFluxPatternProviderScreenMixin",
-                    "com.mesoulcard.mixins.compat.pprovider.screens.ExpandedAEPatternProviderScreenMixin"
+                    "com.mesoulcard.mixins.compat.pprovider.screens.ExpandedAEPatternProviderScreenMixin",
+                    "com.mesoulcard.mixins.compat.io.extendedae.GuiExIOBusMixin"
             },
             new String[] {
                     "appflux",
-                    "expandedae"
+                    "expandedae",
+                    "extendedae"
             });
 
 

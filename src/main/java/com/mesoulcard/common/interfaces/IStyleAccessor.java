@@ -1,4 +1,4 @@
-package com.mesoulcard.helper;
+package com.mesoulcard.common.interfaces;
 
 import appeng.client.gui.style.Blitter;
 import appeng.client.gui.style.WidgetStyle;

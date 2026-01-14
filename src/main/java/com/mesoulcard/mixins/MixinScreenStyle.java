@@ -3,7 +3,7 @@ package com.mesoulcard.mixins;
 import appeng.client.gui.style.Blitter;
 import appeng.client.gui.style.ScreenStyle;
 import appeng.client.gui.style.WidgetStyle;
-import com.mesoulcard.helper.IStyleAccessor;
+import com.mesoulcard.common.interfaces.IStyleAccessor;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

@@ -1,9 +1,9 @@
-package com.mesoulcard.mixins.io;
+package com.mesoulcard.mixins.compat.io.extendedae;
 
-import appeng.client.gui.implementations.IOBusScreen;
 import appeng.client.gui.implementations.UpgradeableScreen;
 import appeng.client.gui.style.ScreenStyle;
-import appeng.menu.implementations.IOBusMenu;
+import com.glodblock.github.extendedae.client.gui.GuiExIOBus;
+import com.glodblock.github.extendedae.container.ContainerExIOBus;
 import com.mesoulcard.core.Registration;
 import com.mesoulcard.common.interfaces.ISoulSurgeScreenAccessor;
 import com.mesoulcard.helper.SoulSurgeScreenHelper;
@@ -18,17 +18,17 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(IOBusScreen.class)
-public class IOBusScreenMixin extends UpgradeableScreen<IOBusMenu> implements ISoulSurgeScreenAccessor {
+@Mixin(GuiExIOBus.class)
+public class GuiExIOBusMixin extends UpgradeableScreen<ContainerExIOBus> implements ISoulSurgeScreenAccessor {
     @Unique
     private SoulSurgeScreenHelper soulHelper;
 
-    public IOBusScreenMixin(IOBusMenu menu, Inventory playerInventory, Component title, ScreenStyle style) {
+    public GuiExIOBusMixin(ContainerExIOBus menu, Inventory playerInventory, Component title, ScreenStyle style) {
         super(menu, playerInventory, title, style);
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void onInit(IOBusMenu menu, Inventory playerInventory, Component title, ScreenStyle style, CallbackInfo ci) {
+    private void onInit(ContainerExIOBus menu, Inventory playerInventory, Component title, ScreenStyle style, CallbackInfo ci) {
         soulHelper = new SoulSurgeScreenHelper(this);
 
         soulHelper.init();

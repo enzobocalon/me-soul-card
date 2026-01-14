@@ -4,7 +4,7 @@ import appeng.client.gui.AEBaseScreen;
 import appeng.client.gui.implementations.PatternProviderScreen;
 import appeng.menu.implementations.PatternProviderMenu;
 import com.glodblock.github.appflux.util.helpers.IUpgradableMenu;
-import com.mesoulcard.helper.IPatternProviderScreenAccessor;
+import com.mesoulcard.common.interfaces.IPatternProviderScreenAccessor;
 import net.minecraft.world.level.ItemLike;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
@@ -15,7 +15,7 @@ public abstract class AppFluxPatternProviderScreenMixin<P extends PatternProvide
     implements IPatternProviderScreenAccessor {
 
   @Override
-  public boolean mesoulcard$hasUpgradeInstalled(ItemLike upgrade) {
+  public boolean mesoulcard$compatHasUpgradeInstalled(ItemLike upgrade) {
     AEBaseScreen<?> screen = (AEBaseScreen<?>) (Object) this;
     if (screen.getMenu() instanceof IUpgradableMenu menu) {
       return menu.hasUpgrade(upgrade);

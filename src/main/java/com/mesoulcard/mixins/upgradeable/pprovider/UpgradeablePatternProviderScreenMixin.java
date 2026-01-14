@@ -19,9 +19,9 @@ import appeng.client.gui.widgets.UpgradesPanel;
 import appeng.core.localization.GuiText;
 import appeng.menu.SlotSemantics;
 import appeng.menu.implementations.PatternProviderMenu;
-import com.mesoulcard.helper.IStyleAccessor;
-import com.mesoulcard.helper.IUpgradableMenu;
-import com.mesoulcard.helper.IPatternProviderScreenAccessor;
+import com.mesoulcard.common.interfaces.IStyleAccessor;
+import com.mesoulcard.common.interfaces.IUpgradableMenu;
+import com.mesoulcard.common.interfaces.IPatternProviderScreenAccessor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.level.ItemLike;
@@ -35,7 +35,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mixin({ PatternProviderScreen.class })
-public class UpgradeablePatternProviderScreenMixin<P extends PatternProviderMenu> extends AEBaseScreen<P> implements IPatternProviderScreenAccessor {
+public class UpgradeablePatternProviderScreenMixin<P extends PatternProviderMenu> extends AEBaseScreen<P>
+        implements IPatternProviderScreenAccessor {
     public UpgradeablePatternProviderScreenMixin(P menu, Inventory playerInventory, Component title,
             ScreenStyle style) {
         super(menu, playerInventory, title, style);
@@ -73,7 +74,7 @@ public class UpgradeablePatternProviderScreenMixin<P extends PatternProviderMenu
     }
 
     @Override
-    public boolean mesoulcard$hasUpgradeInstalled(ItemLike upgrade) {
+    public boolean mesoulcard$compatHasUpgradeInstalled(ItemLike upgrade) {
         if (menu instanceof IUpgradableMenu upgradableMenu) {
             return upgradableMenu.hasUpgrade(upgrade);
         }

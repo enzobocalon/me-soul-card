@@ -1,10 +1,8 @@
-package com.mesoulcard.mixins.io;
+package com.mesoulcard.mixins.upgradeable;
 
 import appeng.menu.AEBaseMenu;
-import appeng.menu.implementations.IOBusMenu;
 import appeng.menu.implementations.UpgradeableMenu;
 import appeng.parts.AEBasePart;
-import appeng.parts.automation.IOBusPart;
 import com.mesoulcard.common.SoulService;
 import com.mesoulcard.common.interfaces.IAccelerationReceiver;
 import com.mesoulcard.common.interfaces.ISoulDistributorAccessor;
@@ -19,22 +17,23 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(IOBusMenu.class)
-public class IOBusMenuMixin extends UpgradeableMenu<IOBusPart> implements IAccelerationReceiver {
+@Mixin(UpgradeableMenu.class)
+public abstract class UpgradeableMenuMixin extends AEBaseMenu implements IAccelerationReceiver {
+
     @Unique
     private int clientMultiplier = 1;
 
     @Unique
     private boolean clientLock = false;
 
-    public IOBusMenuMixin(MenuType<?> menuType, int id, Inventory ip, IOBusPart host) {
-        super(menuType, id, ip, host);
+    public UpgradeableMenuMixin(MenuType<?> menuType, int id, Inventory playerInventory, Object host) {
+        super(menuType, id, playerInventory, host);
     }
 
 
     @Inject(method = "broadcastChanges", at = @At("TAIL"))
     private void broadcastChanges(CallbackInfo ci) {
-        if (!this.getPlayer().level().isClientSide()) {
+        if (!this.getPlayer().level().isClientSide) {
             int currentMultiplier = getMultiplier();
             boolean currentLocked = isLocked();
 
