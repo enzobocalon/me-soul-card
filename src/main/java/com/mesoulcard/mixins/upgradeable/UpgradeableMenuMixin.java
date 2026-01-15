@@ -1,5 +1,6 @@
 package com.mesoulcard.mixins.upgradeable;
 
+import appeng.helpers.InterfaceLogicHost;
 import appeng.menu.AEBaseMenu;
 import appeng.menu.implementations.UpgradeableMenu;
 import appeng.parts.AEBasePart;
@@ -30,7 +31,6 @@ public abstract class UpgradeableMenuMixin extends AEBaseMenu implements IAccele
         super(menuType, id, playerInventory, host);
     }
 
-
     @Inject(method = "broadcastChanges", at = @At("TAIL"))
     private void broadcastChanges(CallbackInfo ci) {
         if (!this.getPlayer().level().isClientSide) {
@@ -54,20 +54,36 @@ public abstract class UpgradeableMenuMixin extends AEBaseMenu implements IAccele
             }
         }
 
+        // Try InterfaceLogicHost -> InterfaceLogic
+        if (host instanceof InterfaceLogicHost interfaceHost) {
+            var logic = interfaceHost.getInterfaceLogic();
+            if (logic instanceof ISoulDistributorAccessor accessor) {
+                var distributor = accessor.getDistributor();
+                if (distributor != null) {
+                    return distributor.getAccelerationMultiplier();
+                }
+            }
+        }
+
         // Fallback to grid service
-        if (!(host instanceof AEBasePart part)) return 1;
+        if (!(host instanceof AEBasePart part))
+            return 1;
 
         var mainNode = part.getMainNode();
-        if (!mainNode.isActive()) return 1;
+        if (!mainNode.isActive())
+            return 1;
 
         var grid = mainNode.getGrid();
-        if (grid == null) return 1;
+        if (grid == null)
+            return 1;
 
         var service = grid.getService(SoulService.class);
-        if (service == null) return 1;
+        if (service == null)
+            return 1;
 
         var distributor = service.getDistributor(mainNode.getNode());
-        if (distributor == null)  return 1;
+        if (distributor == null)
+            return 1;
 
         return distributor.getAccelerationMultiplier();
     }
@@ -82,27 +98,43 @@ public abstract class UpgradeableMenuMixin extends AEBaseMenu implements IAccele
             }
         }
 
+        // Try InterfaceLogicHost -> InterfaceLogic
+        if (host instanceof InterfaceLogicHost interfaceHost) {
+            var logic = interfaceHost.getInterfaceLogic();
+            if (logic instanceof ISoulDistributorAccessor accessor) {
+                var distributor = accessor.getDistributor();
+                if (distributor != null) {
+                    return distributor.isLocked();
+                }
+            }
+        }
+
         // Fallback to grid service
-        if (!(host instanceof AEBasePart part)) return false;
+        if (!(host instanceof AEBasePart part))
+            return false;
 
         var mainNode = part.getMainNode();
-        if (!mainNode.isActive()) return false;
+        if (!mainNode.isActive())
+            return false;
 
         var grid = mainNode.getGrid();
-        if (grid == null) return false;
+        if (grid == null)
+            return false;
 
         var service = grid.getService(SoulService.class);
-        if (service == null) return false;
+        if (service == null)
+            return false;
 
         var distributor = service.getDistributor(mainNode.getNode());
-        if (distributor == null) return false;
+        if (distributor == null)
+            return false;
 
         return distributor.isLocked();
     }
 
     /*
      * Receive from client in server
-     * */
+     */
     @Override
     @Unique
     public void receiveStates(int multiplier) {
@@ -133,10 +165,9 @@ public abstract class UpgradeableMenuMixin extends AEBaseMenu implements IAccele
         distributor.setAccelerationMultiplier(multiplier);
     }
 
-
     /*
      * Receive from server in client
-     * */
+     */
     @Override
     public void receiveClientSync(int multiplier, boolean locked) {
         this.clientMultiplier = multiplier;

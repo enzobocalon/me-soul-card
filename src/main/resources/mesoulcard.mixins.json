@@ -31,6 +31,7 @@
   },
   "client": [
     "aeinterface.InterfaceScreenMixin",
+    "compat.aeinterface.extendedae.GuiExInterfaceMixin",
     "compat.io.advancedae.ImportExportBusScreenMixin",
     "compat.io.extendedae.GuiExIOBusMixin",
     "compat.pprovider.advancedae.AdvPatternProviderScreenMixin",
