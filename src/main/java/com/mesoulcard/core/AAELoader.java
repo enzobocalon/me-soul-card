@@ -9,5 +9,6 @@ public class AAELoader {
     public static void registerUpgradesInAAEParts(DeferredItem<UpgradeCardItem> soulCard) {
         Upgrades.add(soulCard, AAEItems.ADV_PATTERN_PROVIDER, 1);
         Upgrades.add(soulCard, AAEItems.SMALL_ADV_PATTERN_PROVIDER, 1);
+        Upgrades.add(soulCard, AAEItems.IMPORT_EXPORT_BUS, 1);
     }
 }

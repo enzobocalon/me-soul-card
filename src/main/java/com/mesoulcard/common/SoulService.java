@@ -20,11 +20,14 @@ public class SoulService implements IGridService, IGridServiceProvider {
 
     @Override
     public void onLevelEndTick(Level level) {
-        for (var dis : this.active) {
+        var iterator = this.active.iterator();
+        while (iterator.hasNext()) {
+            var dis = iterator.next();
             if (dis.isActive()) {
                 dis.accelerate();
             } else {
                 dis.cleanup();
+                iterator.remove();
             }
         }
     }

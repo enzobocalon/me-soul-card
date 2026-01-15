@@ -54,7 +54,7 @@ public class SoulDistributor implements ISoulDistributor {
 
     @Override
     public void accelerate() {
-        System.out.println("current multiplier " + accelerationMultiplier);
+//        System.out.println("current multiplier " + accelerationMultiplier);
         if (!hasUpgrade.getAsBoolean()) {
             releaseCurrentLock();
             return;
