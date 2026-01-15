@@ -6,6 +6,7 @@
   "mixins": [
     "MixinScreenStyle",
     "SoulSurgeBlockEntityMixin",
+    "aeinterface.InterfaceLogicMixin",
     "compat.pprovider.PartExPatternProviderMixin",
     "compat.pprovider.advancedae.AdvPatternProviderLogicHostMixin",
     "compat.pprovider.advancedae.AdvPatternProviderLogicMixin",
@@ -29,6 +30,7 @@
     "requireAnnotations": true
   },
   "client": [
+    "aeinterface.InterfaceScreenMixin",
     "compat.io.advancedae.ImportExportBusScreenMixin",
     "compat.io.extendedae.GuiExIOBusMixin",
     "compat.pprovider.advancedae.AdvPatternProviderScreenMixin",

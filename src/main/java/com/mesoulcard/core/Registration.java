@@ -32,7 +32,7 @@ public class Registration {
     }
 
     public static void registerUpgrades() {
-        Upgrades.add(SOUL_CARD, AEBlocks.INTERFACE, 1);
+        Upgrades.add(SOUL_CARD, AEParts.INTERFACE, 1);
         Upgrades.add(SOUL_CARD, AEParts.PATTERN_PROVIDER, 1);
         Upgrades.add(SOUL_CARD, AEParts.EXPORT_BUS, 1);
         Upgrades.add(SOUL_CARD, AEParts.IMPORT_BUS, 1);
