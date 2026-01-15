@@ -20,26 +20,50 @@ public class MixinPlugin implements IMixinConfigPlugin {
                     "com.mesoulcard.mixins.upgradeable.pprovider.UpgradeablePatternProviderLogicMixin",
                     "com.mesoulcard.mixins.upgradeable.pprovider.UpgradeablePatternProviderScreenMixin",
                     "com.mesoulcard.mixins.upgradeable.pprovider.UpgradeablePatternProviderMenuMixin",
-                    "com.mesoulcard.mixins.MixinScreenStyle"
+
+                    "com.mesoulcard.mixins.upgradeable.advancedae.pprovider.UpgradeableAdvPatternProviderLogicMixin",
+                    "com.mesoulcard.mixins.upgradeable.advancedae.pprovider.UpgradeableAdvPatternProviderScreenMixin",
+                    "com.mesoulcard.mixins.upgradeable.advancedae.pprovider.UpgradeableAdvPatternProviderMenuMixin",
+                    "com.mesoulcard.mixins.upgradeable.advancedae.pprovider.UpgradeableSmallAdvPatternProviderScreenMixin"
             },
             new List[] {
-                    List.of("expandedae", "appflux", "pccard"),
-                    List.of("expandedae", "appflux", "pccard"),
-                    List.of("expandedae", "appflux", "pccard"),
-                    List.of("expandedae", "appflux", "pccard")
+                    List.of("expandedae", "appflux"),
+                    List.of("expandedae", "appflux"),
+                    List.of("expandedae", "appflux"),
+                    List.of("appflux"),
+                    List.of("appflux"),
+                    List.of("appflux"),
+                    List.of("appflux")
             });
 
     // Enabled when B mods are loaded
-    public static final Object2ObjectMap<String, String> mixinMapEnableCompat = new Object2ObjectOpenHashMap<>(
+    public static final Object2ObjectMap<String, List<String>> mixinMapEnableCompat = new Object2ObjectOpenHashMap<>(
             new String[] {
                     "com.mesoulcard.mixins.compat.pprovider.screens.AppFluxPatternProviderScreenMixin",
                     "com.mesoulcard.mixins.compat.pprovider.screens.ExpandedAEPatternProviderScreenMixin",
-                    "com.mesoulcard.mixins.compat.io.extendedae.GuiExIOBusMixin"
+
+                    "com.mesoulcard.mixins.compat.io.extendedae.GuiExIOBusMixin",
+
+                    "com.mesoulcard.mixins.compat.pprovider.advancedae.AdvPatternProviderLogicHostMixin",
+                    "com.mesoulcard.mixins.compat.pprovider.advancedae.AdvPatternProviderScreenMixin",
+                    "com.mesoulcard.mixins.compat.pprovider.advancedae.AdvPatternProviderMenuMixin",
+                    "com.mesoulcard.mixins.compat.pprovider.advancedae.AdvPatternProviderLogicMixin",
+                    "com.mesoulcard.mixins.compat.pprovider.advancedae.AdvPatternProviderPartMixin",
+
+                    "com.mesoulcard.mixins.compat.pprovider.screens.AppFluxAdvPatternProviderScreenMixin",
+                    "com.mesoulcard.mixins.compat.pprovider.screens.AppFluxSmallAdvPatternProviderScreenMixin"
             },
-            new String[] {
-                    "appflux",
-                    "expandedae",
-                    "extendedae"
+            new List[] {
+                    List.of("appflux"),
+                    List.of("expandedae"),
+                    List.of("extendedae"),
+                    List.of("advanced_ae"),
+                    List.of("advanced_ae"),
+                    List.of("advanced_ae"),
+                    List.of("advanced_ae"),
+                    List.of("advanced_ae"),
+                    List.of("advanced_ae", "appflux"),
+                    List.of("advanced_ae", "appflux")
             });
 
 
@@ -54,9 +78,7 @@ public class MixinPlugin implements IMixinConfigPlugin {
     }
 
     @Override
-    public void onLoad(String mixinPackage) {
-
-    }
+    public void onLoad(String mixinPackage) {}
 
     @Override
     public String getRefMapperConfig() {
@@ -70,16 +92,14 @@ public class MixinPlugin implements IMixinConfigPlugin {
         }
 
         if (mixinMapEnableCompat.containsKey(mixinClassName)) {
-            return isModLoaded(mixinMapEnableCompat.get(mixinClassName));
+            return mixinMapEnableCompat.get(mixinClassName).stream().allMatch(this::isModLoaded);
         }
 
         return true;
     }
 
     @Override
-    public void acceptTargets(Set<String> myTargets, Set<String> otherTargets) {
-
-    }
+    public void acceptTargets(Set<String> myTargets, Set<String> otherTargets) {}
 
     @Override
     public List<String> getMixins() {
@@ -87,12 +107,8 @@ public class MixinPlugin implements IMixinConfigPlugin {
     }
 
     @Override
-    public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
-
-    }
+    public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {}
 
     @Override
-    public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
-
-    }
+    public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {}
 }

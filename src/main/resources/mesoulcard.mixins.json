@@ -7,12 +7,18 @@
     "MixinScreenStyle",
     "SoulSurgeBlockEntityMixin",
     "compat.pprovider.PartExPatternProviderMixin",
-    "upgradeable.UpgradeableMenuMixin",
+    "compat.pprovider.advancedae.AdvPatternProviderLogicHostMixin",
+    "compat.pprovider.advancedae.AdvPatternProviderLogicMixin",
+    "compat.pprovider.advancedae.AdvPatternProviderMenuMixin",
+    "compat.pprovider.advancedae.AdvPatternProviderPartMixin",
     "io.IOBusPartMixin",
     "pprovider.PatternProviderLogicHostMixin",
     "pprovider.PatternProviderLogicMixin",
     "pprovider.PatternProviderMenuMixin",
     "pprovider.PatternProviderPartMixin",
+    "upgradeable.UpgradeableMenuMixin",
+    "upgradeable.advancedae.pprovider.UpgradeableAdvPatternProviderLogicMixin",
+    "upgradeable.advancedae.pprovider.UpgradeableAdvPatternProviderMenuMixin",
     "upgradeable.pprovider.UpgradeablePatternProviderLogicMixin",
     "upgradeable.pprovider.UpgradeablePatternProviderMenuMixin"
   ],
@@ -23,11 +29,17 @@
     "requireAnnotations": true
   },
   "client": [
+    "compat.io.extendedae.GuiExIOBusMixin",
+    "compat.pprovider.advancedae.AdvPatternProviderScreenMixin",
+    "compat.pprovider.advancedae.SmallAdvPatternProviderScreenMixin",
+    "compat.pprovider.screens.AppFluxAdvPatternProviderScreenMixin",
+    "compat.pprovider.screens.AppFluxPatternProviderScreenMixin",
+    "compat.pprovider.screens.AppFluxSmallAdvPatternProviderScreenMixin",
+    "compat.pprovider.screens.ExpandedAEPatternProviderScreenMixin",
     "io.IOBusScreenMixin",
     "pprovider.PatternProviderScreenMixin",
-    "upgradeable.pprovider.UpgradeablePatternProviderScreenMixin",
-    "compat.pprovider.screens.AppFluxPatternProviderScreenMixin",
-    "compat.pprovider.screens.ExpandedAEPatternProviderScreenMixin",
-    "compat.io.extendedae.GuiExIOBusMixin"
+    "upgradeable.advancedae.pprovider.UpgradeableAdvPatternProviderScreenMixin",
+    "upgradeable.advancedae.pprovider.UpgradeableSmallAdvPatternProviderScreenMixin",
+    "upgradeable.pprovider.UpgradeablePatternProviderScreenMixin"
   ]
 }

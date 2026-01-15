@@ -41,6 +41,10 @@ public class Registration {
         if (ModList.get().isLoaded("extendedae")) {
             EAELoader.registerUpgradesInEAEParts(SOUL_CARD);
         }
+
+        if (ModList.get().isLoaded("advanced_ae")) {
+            AAELoader.registerUpgradesInAAEParts(SOUL_CARD);
+        }
     }
 
     public static void registerServices() {
