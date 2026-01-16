@@ -148,19 +148,24 @@ public abstract class UpgradeableMenuMixin extends AEBaseMenu implements IAccele
         }
 
         // Fallback to grid service
-        if (!(host instanceof AEBasePart part)) return;
+        if (!(host instanceof AEBasePart part))
+            return;
 
         var mainNode = part.getMainNode();
-        if (!mainNode.isActive()) return;
+        if (!mainNode.isActive())
+            return;
 
         var grid = mainNode.getGrid();
-        if (grid == null) return;
+        if (grid == null)
+            return;
 
         var service = grid.getService(SoulService.class);
-        if (service == null) return;
+        if (service == null)
+            return;
 
         var distributor = service.getDistributor(mainNode.getNode());
-        if (distributor == null) return;
+        if (distributor == null)
+            return;
 
         distributor.setAccelerationMultiplier(multiplier);
     }

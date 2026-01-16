@@ -28,7 +28,7 @@ public abstract class IOBusPartMixin extends UpgradeablePart implements ISoulDis
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    public void IOBusPart(TickRates tickRates, Set supportedKeyTypes, IPartItem partItem, CallbackInfo ci) {
+    public void IOBusPart(TickRates tickRates, Set<?> supportedKeyTypes, IPartItem<?> partItem, CallbackInfo ci) {
         this.distributor = new SoulDistributor(this.getMainNode(),
                 () -> this.getUpgrades().isInstalled(com.mesoulcard.core.Registration.SOUL_CARD.get()),
                 this);

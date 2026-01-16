@@ -15,19 +15,15 @@ public class SoulService implements IGridService, IGridServiceProvider {
     private final Map<IGridNode, ISoulDistributor> distributors = new IdentityHashMap<>();
     private final Set<ISoulDistributor> active = Collections.newSetFromMap(new IdentityHashMap<>());
 
-    public SoulService() {
-    }
+    public SoulService() {}
 
     @Override
     public void onLevelEndTick(Level level) {
-        var iterator = this.active.iterator();
-        while (iterator.hasNext()) {
-            var dis = iterator.next();
+        for (ISoulDistributor dis : this.active) {
             if (dis.isActive()) {
                 dis.accelerate();
             } else {
                 dis.cleanup();
-                iterator.remove();
             }
         }
     }
