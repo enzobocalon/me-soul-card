@@ -133,6 +133,7 @@ dependencies {
     implementation("maven.modrinth:extended-ae:${extended_ae_version}")
     implementation("maven.modrinth:advancedae:${advanced_ae_version}")
     implementation("curse.maven:applied-flux-965012:${app_flux_version}")
+    implementation("io.github.pedroksl:ae2addonlib:${ae2addonlib_version}")
 
 //    compileOnly("maven.modrinth:expanded-ae:${expanded_ae_version}")
 //    compileOnly("maven.modrinth:extended-ae:${extended_ae_version}")

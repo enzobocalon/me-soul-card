@@ -33,6 +33,7 @@
     "aeinterface.InterfaceScreenMixin",
     "compat.aeinterface.extendedae.GuiExInterfaceMixin",
     "compat.io.advancedae.ImportExportBusScreenMixin",
+    "compat.io.advancedae.StockExportBusScreenMixin",
     "compat.io.extendedae.GuiExIOBusMixin",
     "compat.pprovider.advancedae.AdvPatternProviderScreenMixin",
     "compat.pprovider.advancedae.SmallAdvPatternProviderScreenMixin",

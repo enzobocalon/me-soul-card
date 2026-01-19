@@ -12,5 +12,6 @@ public class EAELoader {
         Upgrades.add(soulCard, EAESingletons.EX_EXPORT_BUS, 1);
         Upgrades.add(soulCard, EAESingletons.EX_IMPORT_BUS, 1);
         Upgrades.add(soulCard, EAESingletons.EX_INTERFACE_PART, 1);
+        Upgrades.add(soulCard, EAESingletons.OVERSIZE_INTERFACE_PART, 1);
     }
 }

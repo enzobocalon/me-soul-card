@@ -10,5 +10,6 @@ public class AAELoader {
         Upgrades.add(soulCard, AAEItems.ADV_PATTERN_PROVIDER, 1);
         Upgrades.add(soulCard, AAEItems.SMALL_ADV_PATTERN_PROVIDER, 1);
         Upgrades.add(soulCard, AAEItems.IMPORT_EXPORT_BUS, 1);
+        Upgrades.add(soulCard, AAEItems.STOCK_EXPORT_BUS, 1);
     }
 }
