@@ -194,11 +194,6 @@ public class SoulDistributor implements ISoulDistributor {
         return this.mainNode.isActive();
     }
 
-    @Override
-    public boolean isAwake() {
-        return this.hasUpgrade.getAsBoolean();
-    }
-
     public void updateSleep() {
         if (this.service != null) {
             boolean hasCard = this.hasUpgrade.getAsBoolean();

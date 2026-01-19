@@ -14,18 +14,9 @@ import java.util.Collections;
 import java.util.List;
 
 public abstract class SCIconButton extends Button implements ITooltip {
-    private SCIcon icon;
-    private List<Component> tooltip = Collections.emptyList();
-
     public SCIconButton(OnPress onPress) {
         super(0, 0, 16, 16, Component.empty(), onPress, DEFAULT_NARRATION);
     }
-
-    public SCIconButton(int x, int y, int width, int height, SCIcon icon, OnPress onPress) {
-        super(x, y, width, height, Component.empty(), onPress, DEFAULT_NARRATION);
-        this.icon = icon;
-    }
-
 
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
