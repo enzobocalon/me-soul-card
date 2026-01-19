@@ -49,12 +49,12 @@ public class UpgradeablePatternProviderMenuMixin extends AEBaseMenu implements I
     }
 
     @Override
-    public boolean hasUpgrade(ItemLike upgradeCard) {
-        return getUpgrades().isInstalled(upgradeCard);
+    public boolean meSoulCard$hasUpgrade(ItemLike upgradeCard) {
+        return meSoulCard$getUpgrades().isInstalled(upgradeCard);
     }
 
     @Override
-    public IUpgradeInventory getUpgrades() {
+    public IUpgradeInventory meSoulCard$getUpgrades() {
         return ((IUpgradeableObject) this.logic).getUpgrades();
     }
 }

@@ -22,10 +22,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class UpgradeableMenuMixin extends AEBaseMenu implements IAccelerationReceiver {
 
     @Unique
-    private int clientMultiplier = 1;
+    private int meSoulCard$clientMultiplier = 1;
 
     @Unique
-    private boolean clientLock = false;
+    private boolean meSoulCard$clientLock = false;
 
     public UpgradeableMenuMixin(MenuType<?> menuType, int id, Inventory playerInventory, Object host) {
         super(menuType, id, playerInventory, host);
@@ -34,8 +34,8 @@ public abstract class UpgradeableMenuMixin extends AEBaseMenu implements IAccele
     @Inject(method = "broadcastChanges", at = @At("TAIL"))
     private void broadcastChanges(CallbackInfo ci) {
         if (!this.getPlayer().level().isClientSide) {
-            int currentMultiplier = getMultiplier();
-            boolean currentLocked = isLocked();
+            int currentMultiplier = meSoulCard$getMultiplier();
+            boolean currentLocked = meSoulCard$isLocked();
 
             if (this.getPlayer() instanceof ServerPlayer serverPlayer) {
                 PacketDistributor.sendToPlayer(serverPlayer,
@@ -45,10 +45,10 @@ public abstract class UpgradeableMenuMixin extends AEBaseMenu implements IAccele
     }
 
     @Unique
-    private int getMultiplier() {
+    private int meSoulCard$getMultiplier() {
         var host = this.getActionHost();
         if (host instanceof ISoulDistributorAccessor accessor) {
-            var distributor = accessor.getDistributor();
+            var distributor = accessor.meSoulCard$getDistributor();
             if (distributor != null) {
                 return distributor.getAccelerationMultiplier();
             }
@@ -58,7 +58,7 @@ public abstract class UpgradeableMenuMixin extends AEBaseMenu implements IAccele
         if (host instanceof InterfaceLogicHost interfaceHost) {
             var logic = interfaceHost.getInterfaceLogic();
             if (logic instanceof ISoulDistributorAccessor accessor) {
-                var distributor = accessor.getDistributor();
+                var distributor = accessor.meSoulCard$getDistributor();
                 if (distributor != null) {
                     return distributor.getAccelerationMultiplier();
                 }
@@ -89,10 +89,10 @@ public abstract class UpgradeableMenuMixin extends AEBaseMenu implements IAccele
     }
 
     @Unique
-    private boolean isLocked() {
+    private boolean meSoulCard$isLocked() {
         var host = this.getActionHost();
         if (host instanceof ISoulDistributorAccessor accessor) {
-            var distributor = accessor.getDistributor();
+            var distributor = accessor.meSoulCard$getDistributor();
             if (distributor != null) {
                 return distributor.isLocked();
             }
@@ -102,7 +102,7 @@ public abstract class UpgradeableMenuMixin extends AEBaseMenu implements IAccele
         if (host instanceof InterfaceLogicHost interfaceHost) {
             var logic = interfaceHost.getInterfaceLogic();
             if (logic instanceof ISoulDistributorAccessor accessor) {
-                var distributor = accessor.getDistributor();
+                var distributor = accessor.meSoulCard$getDistributor();
                 if (distributor != null) {
                     return distributor.isLocked();
                 }
@@ -137,10 +137,10 @@ public abstract class UpgradeableMenuMixin extends AEBaseMenu implements IAccele
      */
     @Override
     @Unique
-    public void receiveStates(int multiplier) {
+    public void meSoulCard$receiveStates(int multiplier) {
         var host = this.getActionHost();
         if (host instanceof ISoulDistributorAccessor accessor) {
-            var distributor = accessor.getDistributor();
+            var distributor = accessor.meSoulCard$getDistributor();
             if (distributor != null) {
                 distributor.setAccelerationMultiplier(multiplier);
                 return;
@@ -174,18 +174,18 @@ public abstract class UpgradeableMenuMixin extends AEBaseMenu implements IAccele
      * Receive from server in client
      */
     @Override
-    public void receiveClientSync(int multiplier, boolean locked) {
-        this.clientMultiplier = multiplier;
-        this.clientLock = locked;
+    public void meSoulCard$receiveClientSync(int multiplier, boolean locked) {
+        this.meSoulCard$clientMultiplier = multiplier;
+        this.meSoulCard$clientLock = locked;
     }
 
     @Override
-    public int getClientMultiplier() {
-        return this.clientMultiplier;
+    public int meSoulCard$getClientMultiplier() {
+        return this.meSoulCard$clientMultiplier;
     }
 
     @Override
-    public boolean getClientLockStatus() {
-        return this.clientLock;
+    public boolean meSoulCard$getClientLockStatus() {
+        return this.meSoulCard$clientLock;
     }
 }

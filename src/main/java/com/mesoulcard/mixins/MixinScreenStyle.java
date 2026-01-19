@@ -20,12 +20,12 @@ public class MixinScreenStyle implements IStyleAccessor {
     private Map<String, WidgetStyle> widgets;
 
     @Override
-    public Map<String, Blitter> getImages() {
+    public Map<String, Blitter> meSoulCard$getImages() {
         return this.images;
     }
 
     @Override
-    public Map<String, WidgetStyle> getWidgets() {
+    public Map<String, WidgetStyle> meSoulCard$getWidgets() {
         return this.widgets;
     }
 }

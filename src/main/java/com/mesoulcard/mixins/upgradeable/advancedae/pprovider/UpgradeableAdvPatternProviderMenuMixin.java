@@ -46,19 +46,19 @@ public class UpgradeableAdvPatternProviderMenuMixin extends AEBaseMenu implement
                     target = "Lnet/pedroksl/advanced_ae/gui/advpatternprovider/AdvPatternProviderMenu;"
                             + "createPlayerInventorySlots(Lnet/minecraft/world/entity/player/Inventory;)V"),
             remap = false)
-    private void onInit(MenuType menuType, int id, Inventory playerInventory, AdvPatternProviderLogicHost host, CallbackInfo ci) {
+    private void onInit(MenuType<?> menuType, int id, Inventory playerInventory, AdvPatternProviderLogicHost host, CallbackInfo ci) {
         this.toolbox = new ToolboxMenu(this);
         IUpgradeInventory upgrades = ((IUpgradeableObject) host).getUpgrades();
         this.setupUpgrades(upgrades);
     }
 
     @Override
-    public boolean hasUpgrade(ItemLike upgradeCard) {
-        return getUpgrades().isInstalled(upgradeCard);
+    public boolean meSoulCard$hasUpgrade(ItemLike upgradeCard) {
+        return this.meSoulCard$getUpgrades().isInstalled(upgradeCard);
     }
 
     @Override
-    public IUpgradeInventory getUpgrades() {
+    public IUpgradeInventory meSoulCard$getUpgrades() {
         return ((IUpgradeableObject) this.logic).getUpgrades();
     }
 

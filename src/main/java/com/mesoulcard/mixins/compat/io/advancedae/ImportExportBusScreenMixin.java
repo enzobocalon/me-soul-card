@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin({ImportExportBusScreen.class})
 public class ImportExportBusScreenMixin extends UpgradeableScreen<ImportExportBusMenu> implements ISoulSurgeScreenAccessor {
     @Unique
-    private SoulSurgeScreenHelper soulHelper;
+    private SoulSurgeScreenHelper meSoulCard$soulHelper;
 
     public ImportExportBusScreenMixin(ImportExportBusMenu menu, Inventory playerInventory, Component title, ScreenStyle style) {
         super(menu, playerInventory, title, style);
@@ -30,14 +30,14 @@ public class ImportExportBusScreenMixin extends UpgradeableScreen<ImportExportBu
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void onInit(ImportExportBusMenu menu, Inventory playerInventory, Component title, ScreenStyle style, CallbackInfo ci) {
-        soulHelper = new SoulSurgeScreenHelper(this);
+        meSoulCard$soulHelper = new SoulSurgeScreenHelper(this);
 
-        soulHelper.init();
+        meSoulCard$soulHelper.init();
     }
 
     @Inject(method = "updateBeforeRender", at = @At("TAIL"))
     private void onUpdateBeforeRender(CallbackInfo ci) {
-        soulHelper.update();
+        meSoulCard$soulHelper.update();
     }
 
     @Override

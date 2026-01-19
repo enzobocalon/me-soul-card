@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin({GuiExInterface.class})
 public class GuiExInterfaceMixin extends UpgradeableScreen<ContainerExInterface> implements ISoulSurgeScreenAccessor {
     @Unique
-    private SoulSurgeScreenHelper soulHelper;
+    private SoulSurgeScreenHelper meSoulCard$soulHelper;
 
     public GuiExInterfaceMixin(ContainerExInterface menu, Inventory playerInventory, Component title, ScreenStyle style) {
         super(menu, playerInventory, title, style);
@@ -30,14 +30,14 @@ public class GuiExInterfaceMixin extends UpgradeableScreen<ContainerExInterface>
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void onInit(ContainerExInterface menu, Inventory playerInventory, Component title, ScreenStyle style, CallbackInfo ci) {
-        soulHelper = new SoulSurgeScreenHelper(this);
+        meSoulCard$soulHelper = new SoulSurgeScreenHelper(this);
 
-        soulHelper.init();
+        meSoulCard$soulHelper.init();
     }
 
     @Inject(method = "updateBeforeRender", at = @At("TAIL"))
     private void onUpdateBeforeRender(CallbackInfo ci) {
-        soulHelper.update();
+        meSoulCard$soulHelper.update();
     }
 
     @Override

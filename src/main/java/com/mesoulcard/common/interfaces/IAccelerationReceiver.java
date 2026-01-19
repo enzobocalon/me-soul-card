@@ -1,11 +1,11 @@
 package com.mesoulcard.common.interfaces;
 
 public interface IAccelerationReceiver {
-    void receiveStates(int multiplier);
+    void meSoulCard$receiveStates(int multiplier);
 
-    void receiveClientSync(int multiplier, boolean locked);
+    void meSoulCard$receiveClientSync(int multiplier, boolean locked);
 
-    int getClientMultiplier();
+    int meSoulCard$getClientMultiplier();
 
-    boolean getClientLockStatus();
+    boolean meSoulCard$getClientLockStatus();
 }

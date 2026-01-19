@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(IOBusScreen.class)
 public class IOBusScreenMixin extends UpgradeableScreen<IOBusMenu> implements ISoulSurgeScreenAccessor {
     @Unique
-    private SoulSurgeScreenHelper soulHelper;
+    private SoulSurgeScreenHelper meSoulCard$soulHelper;
 
     public IOBusScreenMixin(IOBusMenu menu, Inventory playerInventory, Component title, ScreenStyle style) {
         super(menu, playerInventory, title, style);
@@ -29,14 +29,14 @@ public class IOBusScreenMixin extends UpgradeableScreen<IOBusMenu> implements IS
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void onInit(IOBusMenu menu, Inventory playerInventory, Component title, ScreenStyle style, CallbackInfo ci) {
-        soulHelper = new SoulSurgeScreenHelper(this);
+        meSoulCard$soulHelper = new SoulSurgeScreenHelper(this);
 
-        soulHelper.init();
+        meSoulCard$soulHelper.init();
     }
 
     @Inject(method = "updateBeforeRender", at = @At("TAIL"))
     private void onUpdateBeforeRender(CallbackInfo ci) {
-        soulHelper.update();
+        meSoulCard$soulHelper.update();
     }
 
     @Override

@@ -30,17 +30,17 @@ public class UpgradeableAdvPatternProviderLogicMixin implements IUpgradeableObje
     private AdvPatternProviderLogicHost host;
 
     @Unique
-    private IUpgradeInventory upgrades = UpgradeInventories.empty();
+    private IUpgradeInventory meSoulCard$upgrades = UpgradeInventories.empty();
 
     @Unique
-    private void onUpgradesChanged() {
+    private void meSoulCard$onUpgradesChanged() {
         this.host.saveChanges();
         this.host.getBlockEntity().invalidateCapabilities();
     }
 
     @Override
     public IUpgradeInventory getUpgrades() {
-        return this.upgrades;
+        return this.meSoulCard$upgrades;
     }
 
     @Inject(
@@ -48,7 +48,7 @@ public class UpgradeableAdvPatternProviderLogicMixin implements IUpgradeableObje
             at = @At("TAIL")
     )
     private void init(IManagedGridNode mainNode, AdvPatternProviderLogicHost host, int patternInventorySize, CallbackInfo ci) {
-        this.upgrades = UpgradeInventories.forMachine(host.getTerminalIcon().getItem(), 1, this::onUpgradesChanged);
+        this.meSoulCard$upgrades = UpgradeInventories.forMachine(host.getTerminalIcon().getItem(), 1, this::meSoulCard$onUpgradesChanged);
     }
 
     @Inject(
@@ -56,7 +56,7 @@ public class UpgradeableAdvPatternProviderLogicMixin implements IUpgradeableObje
             at = @At("TAIL")
     )
     private void saveUpgrade(CompoundTag tag, HolderLookup.Provider registries, CallbackInfo ci) {
-        this.upgrades.writeToNBT(tag, "upgrades", registries);
+        this.meSoulCard$upgrades.writeToNBT(tag, "upgrades", registries);
     }
 
     @Inject(
@@ -64,7 +64,7 @@ public class UpgradeableAdvPatternProviderLogicMixin implements IUpgradeableObje
             at = @At("TAIL")
     )
     private void loadUpgrade(CompoundTag tag, HolderLookup.Provider registries, CallbackInfo ci) {
-        this.upgrades.readFromNBT(tag, "upgrades", registries);
+        this.meSoulCard$upgrades.readFromNBT(tag, "upgrades", registries);
     }
 
     @Inject(
@@ -72,7 +72,7 @@ public class UpgradeableAdvPatternProviderLogicMixin implements IUpgradeableObje
             at = @At("TAIL")
     )
     private void addUpgradeDrops(List<ItemStack> drops, CallbackInfo ci) {
-        for (var itemStack : this.upgrades) {
+        for (var itemStack : this.meSoulCard$upgrades) {
             if (!itemStack.isEmpty()) {
                 drops.add(itemStack);
             }
@@ -84,6 +84,6 @@ public class UpgradeableAdvPatternProviderLogicMixin implements IUpgradeableObje
             at = @At("TAIL")
     )
     private void clearUpgrades(CallbackInfo ci) {
-        this.upgrades.clear();
+        this.meSoulCard$upgrades.clear();
     }
 }

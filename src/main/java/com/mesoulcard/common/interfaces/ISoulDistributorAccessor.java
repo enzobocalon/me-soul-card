@@ -5,5 +5,5 @@ import org.jetbrains.annotations.Nullable;
 
 public interface ISoulDistributorAccessor {
   @Nullable
-  SoulDistributor getDistributor();
+  SoulDistributor meSoulCard$getDistributor();
 }

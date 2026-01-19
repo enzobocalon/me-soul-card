@@ -39,9 +39,9 @@ public abstract class ExpandedAEPatternProviderScreenMixin<P extends PatternProv
     ws.setHeight(66);
 
     style.getSlots().put("TOOLBOX", sp);
-    ((IStyleAccessor) style).getImages().put("toolbox",
+    ((IStyleAccessor) style).meSoulCard$getImages().put("toolbox",
             Blitter.texture("guis/extra_panels.png", 128, 128).src(69, 62, 59, 66));
-    ((IStyleAccessor) style).getWidgets().put("toolbox", ws);
+    ((IStyleAccessor) style).meSoulCard$getWidgets().put("toolbox", ws);
   }
 
   @Override

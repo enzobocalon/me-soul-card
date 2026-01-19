@@ -27,7 +27,7 @@ public record AccelerationPacket(int value) implements CustomPacketPayload {
             var menu = context.player().containerMenu;
 
             if (menu instanceof IAccelerationReceiver receiver) {
-                receiver.receiveStates(packet.value());
+                receiver.meSoulCard$receiveStates(packet.value());
             }
         });
     }

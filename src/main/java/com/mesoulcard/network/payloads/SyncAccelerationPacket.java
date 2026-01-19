@@ -27,7 +27,7 @@ public record SyncAccelerationPacket(int value, boolean locked) implements Custo
         context.enqueueWork(() -> {
             var player = context.player();
             if (player.containerMenu instanceof IAccelerationReceiver receiver) {
-                receiver.receiveClientSync(packet.value(), packet.locked());
+                receiver.meSoulCard$receiveClientSync(packet.value(), packet.locked());
             }
         });
     }

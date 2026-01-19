@@ -29,7 +29,7 @@ public abstract class PatternProviderScreenMixin<P extends PatternProviderMenu> 
     protected abstract void updateBeforeRender();
 
     @Unique
-    private SoulSurgeScreenHelper soulHelper;
+    private SoulSurgeScreenHelper meSoulCard$soulHelper;
 
     public PatternProviderScreenMixin(P menu, Inventory playerInventory, Component title, ScreenStyle style) {
         super(menu, playerInventory, title, style);
@@ -37,13 +37,13 @@ public abstract class PatternProviderScreenMixin<P extends PatternProviderMenu> 
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void onInit(PatternProviderMenu menu, Inventory inv, Component title, ScreenStyle style, CallbackInfo ci) {
-        soulHelper = new SoulSurgeScreenHelper(this);
-        soulHelper.init();
+        meSoulCard$soulHelper = new SoulSurgeScreenHelper(this);
+        meSoulCard$soulHelper.init();
     }
 
     @Inject(method = "updateBeforeRender", at = @At("TAIL"))
     private void onUpdateBeforeRender(CallbackInfo ci) {
-        soulHelper.update();
+        meSoulCard$soulHelper.update();
     }
 
     @Override
@@ -67,7 +67,7 @@ public abstract class PatternProviderScreenMixin<P extends PatternProviderMenu> 
             return accessor.mesoulcard$compatHasUpgradeInstalled(upgrade);
         }
         if (menu instanceof IUpgradableMenu upgradableMenu) {
-            return upgradableMenu.hasUpgrade(upgrade);
+            return upgradableMenu.meSoulCard$hasUpgrade(upgrade);
         }
         return false;
     }

@@ -1,18 +1,14 @@
 package com.mesoulcard.mixins.compat.pprovider.advancedae;
 
-import appeng.api.upgrades.IUpgradeInventory;
-import appeng.api.upgrades.IUpgradeableObject;
 import appeng.menu.AEBaseMenu;
 import appeng.parts.AEBasePart;
 import com.mesoulcard.common.SoulService;
 import com.mesoulcard.common.interfaces.IAccelerationReceiver;
 import com.mesoulcard.common.interfaces.ISoulDistributorAccessor;
-import com.mesoulcard.common.interfaces.IUpgradableMenu;
 import com.mesoulcard.network.payloads.SyncAccelerationPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.pedroksl.advanced_ae.common.logic.AdvPatternProviderLogic;
 import net.pedroksl.advanced_ae.common.logic.AdvPatternProviderLogicHost;
@@ -28,10 +24,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin({ AdvPatternProviderMenu.class })
 public class AdvPatternProviderMenuMixin extends AEBaseMenu implements IAccelerationReceiver {
     @Unique
-    private int clientMultiplier = 1;
+    private int meSoulCard$clientMultiplier = 1;
 
     @Unique
-    private boolean clientLock = false;
+    private boolean meSoulCard$clientLock = false;
 
     @Final
     @Shadow
@@ -44,8 +40,8 @@ public class AdvPatternProviderMenuMixin extends AEBaseMenu implements IAccelera
     @Inject(method = "broadcastChanges", at = @At("TAIL"))
     private void broadcastChanges(CallbackInfo ci) {
         if (!this.getPlayer().level().isClientSide()) {
-            int currentMultiplier = getMultiplier();
-            boolean currentLocked = isLocked();
+            int currentMultiplier = meSoulCard$getMultiplier();
+            boolean currentLocked = meSoulCard$isLocked();
 
             if (this.getPlayer() instanceof ServerPlayer serverPlayer) {
                 PacketDistributor.sendToPlayer(serverPlayer,
@@ -55,9 +51,9 @@ public class AdvPatternProviderMenuMixin extends AEBaseMenu implements IAccelera
     }
 
     @Unique
-    private int getMultiplier() {
+    private int meSoulCard$getMultiplier() {
         if (this.logic instanceof ISoulDistributorAccessor accessor) {
-            var distributor = accessor.getDistributor();
+            var distributor = accessor.meSoulCard$getDistributor();
             if (distributor != null) {
                 return distributor.getAccelerationMultiplier();
             }
@@ -88,9 +84,9 @@ public class AdvPatternProviderMenuMixin extends AEBaseMenu implements IAccelera
     }
 
     @Unique
-    private boolean isLocked() {
+    private boolean meSoulCard$isLocked() {
         if (this.logic instanceof ISoulDistributorAccessor accessor) {
-            var distributor = accessor.getDistributor();
+            var distributor = accessor.meSoulCard$getDistributor();
             if (distributor != null) {
                 return distributor.isLocked();
             }
@@ -125,9 +121,9 @@ public class AdvPatternProviderMenuMixin extends AEBaseMenu implements IAccelera
      */
     @Override
     @Unique
-    public void receiveStates(int multiplier) {
+    public void meSoulCard$receiveStates(int multiplier) {
         if (this.logic instanceof ISoulDistributorAccessor accessor) {
-            var distributor = accessor.getDistributor();
+            var distributor = accessor.meSoulCard$getDistributor();
             if (distributor != null) {
                 distributor.setAccelerationMultiplier(multiplier);
                 return;
@@ -162,19 +158,19 @@ public class AdvPatternProviderMenuMixin extends AEBaseMenu implements IAccelera
      * Receive from server in client
      */
     @Override
-    public void receiveClientSync(int multiplier, boolean locked) {
-        this.clientMultiplier = multiplier;
-        this.clientLock = locked;
+    public void meSoulCard$receiveClientSync(int multiplier, boolean locked) {
+        this.meSoulCard$clientMultiplier = multiplier;
+        this.meSoulCard$clientLock = locked;
     }
 
     @Override
-    public int getClientMultiplier() {
-        return this.clientMultiplier;
+    public int meSoulCard$getClientMultiplier() {
+        return this.meSoulCard$clientMultiplier;
     }
 
     @Override
-    public boolean getClientLockStatus() {
-        return this.clientLock;
+    public boolean meSoulCard$getClientLockStatus() {
+        return this.meSoulCard$clientLock;
     }
 
 }

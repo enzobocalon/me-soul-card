@@ -36,8 +36,8 @@ public class SoulSurgeScreenHelper {
 
     var menu = screen.mesoulcard$getMenu();
     if (menu instanceof IAccelerationReceiver receiver) {
-      int serverValue = receiver.getClientMultiplier();
-      boolean clientLockStatus = receiver.getClientLockStatus();
+      int serverValue = receiver.meSoulCard$getClientMultiplier();
+      boolean clientLockStatus = receiver.meSoulCard$getClientLockStatus();
 
       if (soulSurgeButton.getMultiplier() != serverValue) {
         soulSurgeButton.setMultiplier(serverValue);

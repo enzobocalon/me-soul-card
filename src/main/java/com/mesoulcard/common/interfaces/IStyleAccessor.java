@@ -7,8 +7,8 @@ import java.util.Map;
 
 public interface IStyleAccessor {
 
-    Map<String, Blitter> getImages();
+    Map<String, Blitter> meSoulCard$getImages();
 
-    Map<String, WidgetStyle> getWidgets();
+    Map<String, WidgetStyle> meSoulCard$getWidgets();
 
 }

@@ -19,14 +19,6 @@ public interface ISoulDistributor extends IGridNodeService {
 
     void cleanup();
 
-    default boolean isAwake() {
-        return false;
-    }
-
-    default boolean isFastMode() {
-        return false;
-    }
-
     void setAccelerationMultiplier(int multiplier);
 
     int getAccelerationMultiplier();

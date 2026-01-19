@@ -26,39 +26,39 @@ public class PatternProviderLogicMixin implements IUpgradeableObject, ISoulDistr
     private IManagedGridNode mainNode;
 
     @Unique
-    private SoulDistributor distributor;
+    private SoulDistributor meSoulCard$distributor;
 
     @Inject(method = "<init>*", at = @At("TAIL"))
     private void init(IManagedGridNode node, PatternProviderLogicHost host, int invSize, CallbackInfo ci) {
         // Should not change the Block version of Pattern Provider. Only Parts can have Soul Distribution.
         if (host instanceof AEBasePart part) {
-            this.distributor = new SoulDistributor(this.mainNode,
+            this.meSoulCard$distributor = new SoulDistributor(this.mainNode,
                     () -> getUpgrades().isInstalled(Registration.SOUL_CARD.get()),
                     part);
-            this.mainNode.addService(ISoulDistributor.class, this.distributor);
+            this.mainNode.addService(ISoulDistributor.class, this.meSoulCard$distributor);
         }
     }
 
     @Inject(method = "writeToNBT", at = @At("TAIL"), remap = false)
     private void onSave(CompoundTag tag, HolderLookup.Provider registries, CallbackInfo ci) {
-        if (this.distributor != null) {
+        if (this.meSoulCard$distributor != null) {
             var distTag = new CompoundTag();
-            this.distributor.writeToNBT(distTag, registries);
+            this.meSoulCard$distributor.writeToNBT(distTag, registries);
             tag.put("MeSoulCard", distTag);
         }
     }
 
     @Inject(method = "readFromNBT", at = @At("TAIL"), remap = false)
     private void onLoad(CompoundTag tag, HolderLookup.Provider registries, CallbackInfo ci) {
-        if (this.distributor != null && tag.contains("MeSoulCard")) {
+        if (this.meSoulCard$distributor != null && tag.contains("MeSoulCard")) {
             var distTag = tag.getCompound("MeSoulCard");
-            this.distributor.readFromNBT(distTag, registries);
+            this.meSoulCard$distributor.readFromNBT(distTag, registries);
         }
     }
 
     @Override
     @Unique
-    public SoulDistributor getDistributor() {
-        return this.distributor;
+    public SoulDistributor meSoulCard$getDistributor() {
+        return this.meSoulCard$distributor;
     }
 }

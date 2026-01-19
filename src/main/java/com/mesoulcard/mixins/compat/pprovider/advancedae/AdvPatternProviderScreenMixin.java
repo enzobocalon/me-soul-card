@@ -2,7 +2,6 @@ package com.mesoulcard.mixins.compat.pprovider.advancedae;
 
 import appeng.client.gui.AEBaseScreen;
 import appeng.client.gui.style.ScreenStyle;
-import appeng.menu.implementations.PatternProviderMenu;
 import com.mesoulcard.common.interfaces.IPatternProviderScreenAccessor;
 import com.mesoulcard.common.interfaces.ISoulSurgeScreenAccessor;
 import com.mesoulcard.common.interfaces.IUpgradableMenu;
@@ -27,7 +26,7 @@ public abstract class AdvPatternProviderScreenMixin<P extends AdvPatternProvider
     protected abstract void updateBeforeRender();
 
     @Unique
-    private SoulSurgeScreenHelper soulHelper;
+    private SoulSurgeScreenHelper meSoulCard$soulHelper;
 
     public AdvPatternProviderScreenMixin(P menu, Inventory playerInventory, Component title, ScreenStyle style) {
         super(menu, playerInventory, title, style);
@@ -35,13 +34,13 @@ public abstract class AdvPatternProviderScreenMixin<P extends AdvPatternProvider
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void onInit(AdvPatternProviderMenu menu, Inventory playerInventory, Component title, ScreenStyle style, CallbackInfo ci) {
-        soulHelper = new SoulSurgeScreenHelper(this);
-        soulHelper.init();
+        meSoulCard$soulHelper = new SoulSurgeScreenHelper(this);
+        meSoulCard$soulHelper.init();
     }
 
     @Inject(method = "updateBeforeRender", at = @At("TAIL"))
     private void onUpdateBeforeRender(CallbackInfo ci) {
-        soulHelper.update();
+        meSoulCard$soulHelper.update();
     }
 
     @Override
@@ -65,7 +64,7 @@ public abstract class AdvPatternProviderScreenMixin<P extends AdvPatternProvider
             return accessor.mesoulcard$compatHasUpgradeInstalled(upgrade);
         }
         if (menu instanceof IUpgradableMenu upgradableMenu) {
-            return upgradableMenu.hasUpgrade(upgrade);
+            return upgradableMenu.meSoulCard$hasUpgrade(upgrade);
         }
         return false;
     }

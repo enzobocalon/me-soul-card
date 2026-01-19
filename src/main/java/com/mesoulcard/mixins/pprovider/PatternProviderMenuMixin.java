@@ -25,13 +25,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class PatternProviderMenuMixin extends AEBaseMenu implements IAccelerationReceiver {
 
     @Unique
-    private int clientMultiplier = 1;
+    private int meSoulCard$clientMultiplier = 1;
 
     @Unique
-    private boolean clientLock = false;
+    private boolean meSoulCard$clientLock = false;
 
     public PatternProviderMenuMixin(MenuType<?> menuType, int id, Inventory playerInventory,
-            PatternProviderLogicHost host) {
+                                    PatternProviderLogicHost host) {
         super(menuType, id, playerInventory, host);
     }
 
@@ -42,8 +42,8 @@ public class PatternProviderMenuMixin extends AEBaseMenu implements IAcceleratio
     @Inject(method = "broadcastChanges", at = @At("TAIL"))
     private void broadcastChanges(CallbackInfo ci) {
         if (!this.getPlayer().level().isClientSide()) {
-            int currentMultiplier = getMultiplier();
-            boolean currentLocked = isLocked();
+            int currentMultiplier = meSoulCard$getMultiplier();
+            boolean currentLocked = meSoulCard$isLocked();
 
             if (this.getPlayer() instanceof ServerPlayer serverPlayer) {
                 PacketDistributor.sendToPlayer(serverPlayer,
@@ -54,9 +54,9 @@ public class PatternProviderMenuMixin extends AEBaseMenu implements IAcceleratio
 
 
     @Unique
-    private int getMultiplier() {
+    private int meSoulCard$getMultiplier() {
         if (this.logic instanceof ISoulDistributorAccessor accessor) {
-            var distributor = accessor.getDistributor();
+            var distributor = accessor.meSoulCard$getDistributor();
             if (distributor != null) {
                 return distributor.getAccelerationMultiplier();
             }
@@ -82,9 +82,9 @@ public class PatternProviderMenuMixin extends AEBaseMenu implements IAcceleratio
     }
 
     @Unique
-    private boolean isLocked() {
+    private boolean meSoulCard$isLocked() {
         if (this.logic instanceof ISoulDistributorAccessor accessor) {
-            var distributor = accessor.getDistributor();
+            var distributor = accessor.meSoulCard$getDistributor();
             if (distributor != null) {
                 return distributor.isLocked();
             }
@@ -110,13 +110,13 @@ public class PatternProviderMenuMixin extends AEBaseMenu implements IAcceleratio
     }
 
     /*
-    * Receive from client in server
-    * */
+     * Receive from client in server
+     * */
     @Override
     @Unique
-    public void receiveStates(int multiplier) {
+    public void meSoulCard$receiveStates(int multiplier) {
         if (this.logic instanceof ISoulDistributorAccessor accessor) {
-            var distributor = accessor.getDistributor();
+            var distributor = accessor.meSoulCard$getDistributor();
             if (distributor != null) {
                 distributor.setAccelerationMultiplier(multiplier);
                 return;
@@ -144,22 +144,22 @@ public class PatternProviderMenuMixin extends AEBaseMenu implements IAcceleratio
 
 
     /*
-    * Receive from server in client
-    * */
+     * Receive from server in client
+     * */
     @Override
-    public void receiveClientSync(int multiplier, boolean locked) {
-        this.clientMultiplier = multiplier;
-        this.clientLock = locked;
+    public void meSoulCard$receiveClientSync(int multiplier, boolean locked) {
+        this.meSoulCard$clientMultiplier = multiplier;
+        this.meSoulCard$clientLock = locked;
     }
 
     @Override
-    public int getClientMultiplier() {
-        return this.clientMultiplier;
+    public int meSoulCard$getClientMultiplier() {
+        return this.meSoulCard$clientMultiplier;
     }
 
     @Override
-    public boolean getClientLockStatus() {
-        return this.clientLock;
+    public boolean meSoulCard$getClientLockStatus() {
+        return this.meSoulCard$clientLock;
     }
 
 }

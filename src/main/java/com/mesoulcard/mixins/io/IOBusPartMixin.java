@@ -21,7 +21,7 @@ import java.util.Set;
 @Mixin(IOBusPart.class)
 public abstract class IOBusPartMixin extends UpgradeablePart implements ISoulDistributorAccessor {
     @Unique
-    private SoulDistributor distributor;
+    private SoulDistributor meSoulCard$distributor;
 
     public IOBusPartMixin(IPartItem<?> partItem) {
         super(partItem);
@@ -29,39 +29,39 @@ public abstract class IOBusPartMixin extends UpgradeablePart implements ISoulDis
 
     @Inject(method = "<init>", at = @At("TAIL"))
     public void IOBusPart(TickRates tickRates, Set<?> supportedKeyTypes, IPartItem<?> partItem, CallbackInfo ci) {
-        this.distributor = new SoulDistributor(this.getMainNode(),
+        this.meSoulCard$distributor = new SoulDistributor(this.getMainNode(),
                 () -> this.getUpgrades().isInstalled(com.mesoulcard.core.Registration.SOUL_CARD.get()),
                 this);
-        this.getMainNode().addService(ISoulDistributor.class, this.distributor);
+        this.getMainNode().addService(ISoulDistributor.class, this.meSoulCard$distributor);
     }
 
     @Inject(method = "writeToNBT", at = @At("TAIL"), remap = false)
     private void onSave(CompoundTag tag, HolderLookup.Provider registries, CallbackInfo ci) {
-        if (this.distributor != null) {
+        if (this.meSoulCard$distributor != null) {
             var distTag = new CompoundTag();
-            this.distributor.writeToNBT(distTag, registries);
+            this.meSoulCard$distributor.writeToNBT(distTag, registries);
             tag.put("MeSoulCard", distTag);
         }
     }
 
     @Inject(method = "readFromNBT", at = @At("TAIL"), remap = false)
     private void onLoad(CompoundTag tag, HolderLookup.Provider registries, CallbackInfo ci) {
-        if (this.distributor != null && tag.contains("MeSoulCard")) {
+        if (this.meSoulCard$distributor != null && tag.contains("MeSoulCard")) {
             var distTag = tag.getCompound("MeSoulCard");
-            this.distributor.readFromNBT(distTag, registries);
+            this.meSoulCard$distributor.readFromNBT(distTag, registries);
         }
     }
 
     @Inject(method = "upgradesChanged", at = @At("TAIL"))
     private void onUpgradesChanged(CallbackInfo ci) {
-        if (this.distributor != null) {
+        if (this.meSoulCard$distributor != null) {
             PatternProviderMixinHelper.updateSoulDistributor(this.getMainNode());
         }
     }
 
     @Override
     @Unique
-    public SoulDistributor getDistributor() {
-        return this.distributor;
+    public SoulDistributor meSoulCard$getDistributor() {
+        return this.meSoulCard$distributor;
     }
 }

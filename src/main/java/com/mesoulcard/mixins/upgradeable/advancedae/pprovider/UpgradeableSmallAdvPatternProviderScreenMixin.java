@@ -44,7 +44,7 @@ public abstract class UpgradeableSmallAdvPatternProviderScreenMixin <P extends A
     private void onInit(SmallAdvPatternProviderMenu menu, Inventory playerInventory, Component title, ScreenStyle style, CallbackInfo ci) {
         this.widgets.add("upgrades", new UpgradesPanel(
                 menu.getSlots(SlotSemantics.UPGRADE),
-                this::getCompatUpgrades));
+                this::meSoulCard$getCompatUpgrades));
         var sp = new SlotPosition();
         sp.setBottom(84);
         sp.setRight(1);
@@ -55,9 +55,9 @@ public abstract class UpgradeableSmallAdvPatternProviderScreenMixin <P extends A
         ws.setWidth(59);
         ws.setHeight(66);
         style.getSlots().put("TOOLBOX", sp);
-        ((IStyleAccessor) style).getImages().put("toolbox",
+        ((IStyleAccessor) style).meSoulCard$getImages().put("toolbox",
                 Blitter.texture("guis/extra_panels.png", 128, 128).src(69, 62, 59, 66));
-        ((IStyleAccessor) style).getWidgets().put("toolbox", ws);
+        ((IStyleAccessor) style).meSoulCard$getWidgets().put("toolbox", ws);
         if (menu instanceof IUpgradableMenu upgradableMenu) {
             ToolboxMenu toolbox = upgradableMenu.getToolbox();
             if (toolbox != null && toolbox.isPresent()) {
@@ -67,17 +67,17 @@ public abstract class UpgradeableSmallAdvPatternProviderScreenMixin <P extends A
     }
 
     @Unique
-    private List<Component> getCompatUpgrades() {
+    private List<Component> meSoulCard$getCompatUpgrades() {
         List<Component> list = new ArrayList<>();
         list.add(GuiText.CompatibleUpgrade.text());
-        list.addAll(Upgrades.getTooltipLinesForMachine(((IUpgradableMenu) menu).getUpgrades().getUpgradableItem()));
+        list.addAll(Upgrades.getTooltipLinesForMachine(((IUpgradableMenu) menu).meSoulCard$getUpgrades().getUpgradableItem()));
         return list;
     }
 
     @Override
     public boolean mesoulcard$compatHasUpgradeInstalled(ItemLike upgrade) {
         if (menu instanceof IUpgradableMenu upgradableMenu) {
-            return upgradableMenu.hasUpgrade(upgrade);
+            return upgradableMenu.meSoulCard$hasUpgrade(upgrade);
         }
         return false;
     }

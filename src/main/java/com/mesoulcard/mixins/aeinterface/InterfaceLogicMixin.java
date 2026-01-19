@@ -28,55 +28,55 @@ public class InterfaceLogicMixin implements IUpgradeableObject, ISoulDistributor
     private IManagedGridNode mainNode;
 
     @Unique
-    private SoulDistributor distributor;
+    private SoulDistributor meSoulCard$distributor;
 
     @Inject(method = "<init>(Lappeng/api/networking/IManagedGridNode;Lappeng/helpers/InterfaceLogicHost;Lnet/minecraft/world/item/Item;)V", at = @At("TAIL"))
     private void init3Params(IManagedGridNode gridNode, InterfaceLogicHost host, Item is, CallbackInfo ci) {
-        initDistributor(host);
+        meSoulCard$initDistributor(host);
     }
 
     @Inject(method = "<init>(Lappeng/api/networking/IManagedGridNode;Lappeng/helpers/InterfaceLogicHost;Lnet/minecraft/world/item/Item;I)V", at = @At("TAIL"))
     private void init4Params(IManagedGridNode gridNode, InterfaceLogicHost host, Item is, int slots, CallbackInfo ci) {
-        initDistributor(host);
+        meSoulCard$initDistributor(host);
     }
 
     @Unique
-    private void initDistributor(InterfaceLogicHost host) {
+    private void meSoulCard$initDistributor(InterfaceLogicHost host) {
         if (host instanceof AEBasePart part) {
-            this.distributor = new SoulDistributor(this.mainNode,
+            this.meSoulCard$distributor = new SoulDistributor(this.mainNode,
                     () -> getUpgrades().isInstalled(Registration.SOUL_CARD.get()),
                     part);
-            this.mainNode.addService(ISoulDistributor.class, this.distributor);
+            this.mainNode.addService(ISoulDistributor.class, this.meSoulCard$distributor);
         }
     }
 
     @Inject(method = "writeToNBT", at = @At("TAIL"), remap = false)
     private void onSave(CompoundTag tag, HolderLookup.Provider registries, CallbackInfo ci) {
-        if (this.distributor != null) {
+        if (this.meSoulCard$distributor != null) {
             var distTag = new CompoundTag();
-            this.distributor.writeToNBT(distTag, registries);
+            this.meSoulCard$distributor.writeToNBT(distTag, registries);
             tag.put("MeSoulCard", distTag);
         }
     }
 
     @Inject(method = "readFromNBT", at = @At("TAIL"), remap = false)
     private void onLoad(CompoundTag tag, HolderLookup.Provider registries, CallbackInfo ci) {
-        if (this.distributor != null && tag.contains("MeSoulCard")) {
+        if (this.meSoulCard$distributor != null && tag.contains("MeSoulCard")) {
             var distTag = tag.getCompound("MeSoulCard");
-            this.distributor.readFromNBT(distTag, registries);
+            this.meSoulCard$distributor.readFromNBT(distTag, registries);
         }
     }
 
     @Inject(method = "onUpgradesChanged", at = @At("TAIL"))
     private void onUpgradesChanged(CallbackInfo ci) {
-        if (this.distributor != null) {
+        if (this.meSoulCard$distributor != null) {
             PatternProviderMixinHelper.updateSoulDistributor(this.mainNode);
         }
     }
 
     @Override
     @Unique
-    public SoulDistributor getDistributor() {
-        return this.distributor;
+    public SoulDistributor meSoulCard$getDistributor() {
+        return this.meSoulCard$distributor;
     }
 }

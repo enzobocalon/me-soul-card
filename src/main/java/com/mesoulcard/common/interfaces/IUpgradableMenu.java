@@ -7,7 +7,7 @@ import net.minecraft.world.level.ItemLike;
 public interface IUpgradableMenu {
     ToolboxMenu getToolbox();
 
-    boolean hasUpgrade(ItemLike upgradeCard);
+    boolean meSoulCard$hasUpgrade(ItemLike upgradeCard);
 
-    IUpgradeInventory getUpgrades();
+    IUpgradeInventory meSoulCard$getUpgrades();
 }
