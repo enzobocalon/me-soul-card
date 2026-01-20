@@ -1,5 +1,5 @@
 {
   "item.mesoulcard.soul_card": "Soul Card",
-  "gui.mesoulcard.status.active": "Active: tick-accelerating target.",
-  "gui.mesoulcard.status.inactive": "Inactive: target already tick-accelerated by another source."
+  "gui.mesoulcard.status.active": "Active - Accelerating target",
+  "gui.mesoulcard.status.inactive": "Inactive - Target locked by another card or insufficient souls"
 }
