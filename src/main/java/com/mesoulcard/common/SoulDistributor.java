@@ -7,6 +7,7 @@ import appeng.me.helpers.MachineSource;
 import appeng.parts.AEBasePart;
 import com.buuz135.industrialforegoingsouls.config.ConfigSoulSurge;
 import com.buuz135.soulplied_energistics.applied.SoulKey;
+import com.mesoulcard.Config;
 import com.mesoulcard.MESoulCard;
 import com.mesoulcard.common.interfaces.ISoulDistributor;
 import com.mesoulcard.helper.SoulAccelerationHelper;
@@ -132,12 +133,10 @@ public class SoulDistributor implements ISoulDistributor {
     }
 
     private void releaseCurrentLock() {
-        if (lastTargetPos == null)
-            return;
+        if (lastTargetPos == null) return;
 
         Level level = this.part.getLevel();
-        if (level == null || level.isClientSide)
-            return;
+        if (level == null || level.isClientSide) return;
 
         SoulAccelerationManager.release(level, lastTargetPos, getDistributorId());
         lastTargetPos = null;

@@ -1,5 +1,6 @@
 package com.mesoulcard.common;
 
+import com.mesoulcard.Config;
 import com.mesoulcard.MESoulCard;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -20,6 +21,10 @@ public class SoulAccelerationManager {
   private static final Map<BlockPos, String> lockCache = new ConcurrentHashMap<>();
 
   public static boolean tryAcquire(Level level, BlockPos targetPos, String distributorId) {
+    if (!Config.ENABLE_ACCELERATION_LOCK.get()) {
+      return true;
+    }
+
     if (level == null || level.isClientSide())
       return false;
 
