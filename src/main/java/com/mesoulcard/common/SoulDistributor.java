@@ -236,11 +236,15 @@ public class SoulDistributor implements ISoulDistributor {
 
     public void writeToNBT(CompoundTag tag, HolderLookup.Provider registries) {
         tag.putInt("soulcard_multiplier", this.accelerationMultiplier);
+        tag.putInt("soulcard_ticking_time", this.tickingTime);
     }
 
     public void readFromNBT(CompoundTag tag, HolderLookup.Provider registries) {
         if (tag.contains("soulcard_multiplier")) {
             this.accelerationMultiplier = tag.getInt("soulcard_multiplier");
+        }
+        if (tag.contains("ticking_time")) {
+            this.tickingTime = tag.getInt("soulcard_ticking_time");
         }
     }
 }
