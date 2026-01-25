@@ -4,6 +4,7 @@ import com.mesoulcard.common.SoulAccelerationManager;
 import com.mesoulcard.core.Registration;
 import com.mesoulcard.network.PacketHandler;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.fml.loading.FMLLoader;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -42,6 +43,14 @@ public class MESoulCard {
 
     public static ResourceLocation makeId(String path) {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+    }
+
+    public static boolean isDevEnv() {
+        return !FMLLoader.isProduction();
+    }
+
+    public static boolean isDebugLogEnabled() {
+        return isDevEnv() && ENABLE_DEBUG_LOGS;
     }
 
     @SubscribeEvent

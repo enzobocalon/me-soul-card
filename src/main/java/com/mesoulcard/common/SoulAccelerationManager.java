@@ -36,7 +36,7 @@ public class SoulAccelerationManager {
       lockCache.put(targetPos, distributorId);
       writeToNBT(level, targetPos, distributorId);
 
-      if (MESoulCard.ENABLE_DEBUG_LOGS) {
+      if (MESoulCard.isDebugLogEnabled()) {
         MESoulCard.LOGGER.debug("[SoulAccelerationManager] {} acquired lock on {}",
             distributorId, targetPos.toShortString());
       }
@@ -49,7 +49,7 @@ public class SoulAccelerationManager {
     }
 
     // Someone else owns the lock
-    if (MESoulCard.ENABLE_DEBUG_LOGS) {
+    if (MESoulCard.isDebugLogEnabled()) {
       MESoulCard.LOGGER.debug("[SoulAccelerationManager] {} blocked on {} - owned by {}",
           distributorId, targetPos.toShortString(), currentOwner);
     }
@@ -72,7 +72,7 @@ public class SoulAccelerationManager {
       lockCache.remove(targetPos);
       removeFromNBT(level, targetPos);
 
-      if (MESoulCard.ENABLE_DEBUG_LOGS) {
+      if (MESoulCard.isDebugLogEnabled()) {
         MESoulCard.LOGGER.debug("[SoulAccelerationManager] {} released lock on {}",
             distributorId, targetPos.toShortString());
       }
@@ -111,7 +111,7 @@ public class SoulAccelerationManager {
         BlockPos pos = blockEntity.getBlockPos();
         lockCache.put(pos, owner);
 
-        if (MESoulCard.ENABLE_DEBUG_LOGS) {
+        if (MESoulCard.isDebugLogEnabled()) {
           MESoulCard.LOGGER.debug("[SoulAccelerationManager] Loaded lock from NBT: {} -> {}",
               pos.toShortString(), owner);
         }
@@ -141,7 +141,7 @@ public class SoulAccelerationManager {
       }
     }
 
-    if (cleared > 0 && MESoulCard.ENABLE_DEBUG_LOGS) {
+    if (cleared > 0 && MESoulCard.isDebugLogEnabled()) {
       MESoulCard.LOGGER.debug("[SoulAccelerationManager] Cleared {} locks in chunk {}",
           cleared, chunkPos);
     }
@@ -154,8 +154,9 @@ public class SoulAccelerationManager {
   public static void clearAll() {
     int size = lockCache.size();
     lockCache.clear();
-
-    MESoulCard.LOGGER.info("[SoulAccelerationManager] Cleared all {} locks from cache", size);
+    if (MESoulCard.isDebugLogEnabled()) {
+      MESoulCard.LOGGER.info("[SoulAccelerationManager] Cleared all {} locks from cache", size);
+    }
   }
 
   // ========== NBT helpers ==========

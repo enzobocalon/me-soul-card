@@ -23,13 +23,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BooleanSupplier;
 
-/*
-* Planned Features:
-* Adds interface button to:
-* 1. Allow user to control how many soul surges the upgrade will simulate (1-6);
-* 2. Adds compatibility with App Flux to allow energy output;
-* */
-
 public class SoulDistributor implements ISoulDistributor {
     private SoulService service;
     private final BooleanSupplier hasUpgrade;
@@ -45,6 +38,7 @@ public class SoulDistributor implements ISoulDistributor {
     private int tickingTime = 0;
 
     private String cachedDistributorId = null;
+    private long lastSoulConsumptionTime = 0;
 
     public SoulDistributor(IManagedGridNode mainNode, BooleanSupplier hasUpgrade, AEBasePart part) {
         this.mainNode = mainNode;
@@ -55,7 +49,6 @@ public class SoulDistributor implements ISoulDistributor {
 
     @Override
     public void accelerate() {
-        // System.out.println("current multiplier " + accelerationMultiplier);
         if (!hasUpgrade.getAsBoolean()) {
             releaseCurrentLock();
             return;
@@ -106,6 +99,9 @@ public class SoulDistributor implements ISoulDistributor {
                 return;
             }
             tickingTime = SOUL_TIME;
+            if (MESoulCard.isDebugLogEnabled()) {
+                lastSoulConsumptionTime = System.currentTimeMillis();
+            }
         }
 
         if (tickingTime > 0) {
@@ -117,6 +113,10 @@ public class SoulDistributor implements ISoulDistributor {
 
             if (didAccelerate) {
                 tickingTime -= 1;
+                if (tickingTime == 0 && MESoulCard.isDebugLogEnabled()) {
+                    long elapsed = System.currentTimeMillis() - lastSoulConsumptionTime;
+                    System.out.println("[SoulDistributor] Elapsed time: " + elapsed + "ms");
+                }
             } else {
                 releaseCurrentLock();
             }
@@ -236,11 +236,15 @@ public class SoulDistributor implements ISoulDistributor {
 
     public void writeToNBT(CompoundTag tag, HolderLookup.Provider registries) {
         tag.putInt("soulcard_multiplier", this.accelerationMultiplier);
+        tag.putInt("soulcard_ticking_time", this.tickingTime);
     }
 
     public void readFromNBT(CompoundTag tag, HolderLookup.Provider registries) {
         if (tag.contains("soulcard_multiplier")) {
             this.accelerationMultiplier = tag.getInt("soulcard_multiplier");
+        }
+        if (tag.contains("ticking_time")) {
+            this.tickingTime = tag.getInt("soulcard_ticking_time");
         }
     }
 }

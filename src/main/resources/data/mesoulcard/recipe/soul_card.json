@@ -1,0 +1,39 @@
+{
+  "type": "industrialforegoing:dissolution_chamber",
+  "category": "misc",
+  "input": [
+    {
+      "item": "industrialforegoingsouls:soul_surge"
+    },
+    {
+      "item": "ae2:advanced_card"
+    },
+    {
+      "item": "industrialforegoingsouls:soul_surge"
+    },
+    {
+      "item": "industrialforegoingsouls:soul_surge"
+    },
+    {
+      "item": "industrialforegoingsouls:soul_surge"
+    },
+    {
+      "item": "industrialforegoingsouls:soul_surge"
+    },
+    {
+      "item": "ae2:fluix_crystal"
+    },
+    {
+      "item": "industrialforegoingsouls:soul_surge"
+    }
+  ],
+  "inputFluid": {
+    "amount": 500,
+    "fluid": "industrialforegoing:pink_slime"
+  },
+  "processingTime": 300,
+  "output": {
+    "id": "mesoulcard:soul_card",
+    "count": 1
+  }
+}
