@@ -23,7 +23,7 @@ public class SoulAccelerationHelper {
                 BlockEntityTicker<BlockEntity> ticker = (BlockEntityTicker<BlockEntity>) state.getTicker(level, targetingTile.getType());
 
                 if (ticker != null) {
-                    for (int i = 0; i < ((ACCELERATION_MULTIPLIER * ConfigSoulSurge.ACCELERATION_TICK) + 1); i++) {
+                    for (int i = 0; i < ((ACCELERATION_MULTIPLIER * ConfigSoulSurge.ACCELERATION_TICK)); i++) {
                         ticker.tick(level, pos, state, targetingTile);
                     }
                     return true;
