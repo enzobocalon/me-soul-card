@@ -38,7 +38,10 @@ public class SoulDistributor implements ISoulDistributor {
     private int tickingTime = 0;
 
     private String cachedDistributorId = null;
-    private long lastSoulConsumptionTime = 0;
+
+    // Debug variables
+    private long accelerationStartTime = 0;
+    private int ticksAccelerated = 0;
 
     public SoulDistributor(IManagedGridNode mainNode, BooleanSupplier hasUpgrade, AEBasePart part) {
         this.mainNode = mainNode;
@@ -100,7 +103,9 @@ public class SoulDistributor implements ISoulDistributor {
             }
             tickingTime = SOUL_TIME;
             if (MESoulCard.isDebugLogEnabled()) {
-                lastSoulConsumptionTime = System.currentTimeMillis();
+                accelerationStartTime = System.nanoTime();
+                ticksAccelerated = 0;
+                System.out.println("[SoulDistributor] Starting acceleration cycle");
             }
         }
 
@@ -113,9 +118,13 @@ public class SoulDistributor implements ISoulDistributor {
 
             if (didAccelerate) {
                 tickingTime -= 1;
+                if (MESoulCard.isDebugLogEnabled()) {
+                    ticksAccelerated++;
+                }
                 if (tickingTime == 0 && MESoulCard.isDebugLogEnabled()) {
-                    long elapsed = System.currentTimeMillis() - lastSoulConsumptionTime;
-                    System.out.println("[SoulDistributor] Elapsed time: " + elapsed + "ms");
+                    long elapsed = (System.nanoTime() - accelerationStartTime) / 1_000_000;
+                    System.out.printf("[SoulDistributor] Ticks: %d | Elapsed: %dms | Avg: %.2fms/tick%n",
+                            ticksAccelerated, elapsed, elapsed / (double)ticksAccelerated);
                 }
             } else {
                 releaseCurrentLock();
