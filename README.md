@@ -1,5 +1,4 @@
-## **![](https://media.forgecdn.net/attachments/description/1445271/description_095107f6-62f4-4039-833e-93a7ae19a287.png)**
-
+<img src="https://media.forgecdn.net/attachments/description/1445271/description_095107f6-62f4-4039-833e-93a7ae19a287.png" width="256" />
 
 # **ME Soul Card**
 
