@@ -1,25 +1,33 @@
+## **![](https://media.forgecdn.net/attachments/description/1445271/description_095107f6-62f4-4039-833e-93a7ae19a287.png)**
 
-Installation information
-=======
 
-This template repository can be directly cloned to get you started with a new
-mod. Simply create a new repository cloned from this one, by following the
-instructions provided by [GitHub](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
+# **ME Soul Card**
 
-Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
+An AE2 upgrade that allows you to accelerate your machines using Souls directly from your AE2 network, without the mess of Soul Surges.
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
 
-Mapping Names:
-============
-By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
 
-Additional Resources: 
-==========
-Community Documentation: https://docs.neoforged.net/  
-NeoForged Discord: https://discord.neoforged.net/
+### **Usage**
+
+Craft the Soul Card and install it in a compatible AE2 machine (Pattern Providers, Interfaces, Export Buses, and Import Buses). **The upgrade is only compatible with the part variants of the corresponding machines.**
+
+
+### **About the locks**
+
+The mod features a system that prevents multiple AE2 machines from accelerating the same block, as well as combining AE2 acceleration with Soul Surges. This means tick acceleration cannot scale beyond what is achievable with Soul Surges.
+
+You can disable this behaviour in configs.
+
+
+
+### **Requirements**
+
+Needs AE2 and Soulplied Energistics to be installed.
+
+
+
+### **Credits**
+
+[Applied Energistics 2](https://www.curseforge.com/minecraft/mc-mods/applied-energistics-2)
+
+[Soulplied Energistics](https://www.curseforge.com/minecraft/mc-mods/soulplied-energistics)
