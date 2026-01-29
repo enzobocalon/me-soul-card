@@ -23,14 +23,14 @@ public class SoulAccelerationHelper {
                 BlockEntityTicker<BlockEntity> ticker = (BlockEntityTicker<BlockEntity>) state.getTicker(level, targetingTile.getType());
 
                 if (ticker != null) {
-                    for (int i = 0; i < ((ACCELERATION_MULTIPLIER * ConfigSoulSurge.ACCELERATION_TICK)); i++) {
+                    for (int i = 0; i < (ACCELERATION_MULTIPLIER * ConfigSoulSurge.ACCELERATION_TICK); i++) {
                         ticker.tick(level, pos, state, targetingTile);
                     }
                     return true;
                 }
             } else if (level instanceof ServerLevel serverLevel) {
                 if (serverLevel.random.nextDouble() < ConfigSoulSurge.RANDOM_TICK_ACCELERATION_CHANCE) {
-                    for (int i = 0; i < ACCELERATION_MULTIPLIER; i++) {
+                    for (int i = 0; i < (ACCELERATION_MULTIPLIER * ConfigSoulSurge.ACCELERATION_TICK); i++) {
                         state.randomTick(serverLevel, pos, serverLevel.random);
                     }
                 }
