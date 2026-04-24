@@ -13,29 +13,6 @@ import java.util.List;
 import java.util.Set;
 
 public class MixinPlugin implements IMixinConfigPlugin {
-
-    // Disabled when B mods are loaded
-    public static final Object2ObjectMap<String, List<String>> mixinMapDisableUpgradeablePPMixins = new Object2ObjectOpenHashMap<>(
-            new String[] {
-                    "com.mesoulcard.mixins.upgradeable.pprovider.UpgradeablePatternProviderLogicMixin",
-                    "com.mesoulcard.mixins.upgradeable.pprovider.UpgradeablePatternProviderScreenMixin",
-                    "com.mesoulcard.mixins.upgradeable.pprovider.UpgradeablePatternProviderMenuMixin",
-
-                    "com.mesoulcard.mixins.upgradeable.advancedae.pprovider.UpgradeableAdvPatternProviderLogicMixin",
-                    "com.mesoulcard.mixins.upgradeable.advancedae.pprovider.UpgradeableAdvPatternProviderScreenMixin",
-                    "com.mesoulcard.mixins.upgradeable.advancedae.pprovider.UpgradeableAdvPatternProviderMenuMixin",
-                    "com.mesoulcard.mixins.upgradeable.advancedae.pprovider.UpgradeableSmallAdvPatternProviderScreenMixin"
-            },
-            new List[] {
-                    List.of("expandedae", "appflux"),
-                    List.of("expandedae", "appflux"),
-                    List.of("expandedae", "appflux"),
-                    List.of("appflux"),
-                    List.of("appflux"),
-                    List.of("appflux"),
-                    List.of("appflux")
-            });
-
     // Enabled when B mods are loaded
     public static final Object2ObjectMap<String, List<String>> mixinMapEnableCompat = new Object2ObjectOpenHashMap<>(
             new String[] {
@@ -87,10 +64,6 @@ public class MixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (mixinMapDisableUpgradeablePPMixins.containsKey(mixinClassName)) {
-            return mixinMapDisableUpgradeablePPMixins.get(mixinClassName).stream().noneMatch(this::isModLoaded);
-        }
-
         if (mixinMapEnableCompat.containsKey(mixinClassName)) {
             return mixinMapEnableCompat.get(mixinClassName).stream().allMatch(this::isModLoaded);
         }

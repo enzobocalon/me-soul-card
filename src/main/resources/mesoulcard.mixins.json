@@ -8,6 +8,8 @@
     "SoulSurgeBlockEntityMixin",
     "aeinterface.InterfaceLogicMixin",
     "compat.pprovider.PartExPatternProviderMixin",
+    "compat.pprovider.PatternProviderCompatLogicMixin",
+    "compat.pprovider.PatternProviderCompatMenuMixin",
     "compat.pprovider.advancedae.AdvPatternProviderLogicHostMixin",
     "compat.pprovider.advancedae.AdvPatternProviderLogicMixin",
     "compat.pprovider.advancedae.AdvPatternProviderMenuMixin",
@@ -17,11 +19,7 @@
     "pprovider.PatternProviderLogicMixin",
     "pprovider.PatternProviderMenuMixin",
     "pprovider.PatternProviderPartMixin",
-    "upgradeable.UpgradeableMenuMixin",
-    "upgradeable.advancedae.pprovider.UpgradeableAdvPatternProviderLogicMixin",
-    "upgradeable.advancedae.pprovider.UpgradeableAdvPatternProviderMenuMixin",
-    "upgradeable.pprovider.UpgradeablePatternProviderLogicMixin",
-    "upgradeable.pprovider.UpgradeablePatternProviderMenuMixin"
+    "upgradeable.UpgradeableMenuMixin"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -35,6 +33,7 @@
     "compat.io.advancedae.ImportExportBusScreenMixin",
     "compat.io.advancedae.StockExportBusScreenMixin",
     "compat.io.extendedae.GuiExIOBusMixin",
+    "compat.pprovider.screens.UpgradesPanelMixin",
     "compat.pprovider.advancedae.AdvPatternProviderScreenMixin",
     "compat.pprovider.advancedae.SmallAdvPatternProviderScreenMixin",
     "compat.pprovider.screens.AppFluxAdvPatternProviderScreenMixin",
@@ -42,9 +41,6 @@
     "compat.pprovider.screens.AppFluxSmallAdvPatternProviderScreenMixin",
     "compat.pprovider.screens.ExpandedAEPatternProviderScreenMixin",
     "io.IOBusScreenMixin",
-    "pprovider.PatternProviderScreenMixin",
-    "upgradeable.advancedae.pprovider.UpgradeableAdvPatternProviderScreenMixin",
-    "upgradeable.advancedae.pprovider.UpgradeableSmallAdvPatternProviderScreenMixin",
-    "upgradeable.pprovider.UpgradeablePatternProviderScreenMixin"
+    "pprovider.PatternProviderScreenMixin"
   ]
 }

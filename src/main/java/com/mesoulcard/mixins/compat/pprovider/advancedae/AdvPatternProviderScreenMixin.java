@@ -1,9 +1,17 @@
 package com.mesoulcard.mixins.compat.pprovider.advancedae;
 
 import appeng.client.gui.AEBaseScreen;
+import appeng.client.gui.layout.SlotGridLayout;
 import appeng.client.gui.style.ScreenStyle;
+import appeng.client.gui.style.Blitter;
+import appeng.client.gui.style.SlotPosition;
+import appeng.client.gui.style.WidgetStyle;
+import appeng.client.gui.widgets.ToolboxPanel;
+import appeng.client.gui.widgets.UpgradesPanel;
+import appeng.menu.SlotSemantics;
 import com.mesoulcard.common.interfaces.IPatternProviderScreenAccessor;
 import com.mesoulcard.common.interfaces.ISoulSurgeScreenAccessor;
+import com.mesoulcard.common.interfaces.IStyleAccessor;
 import com.mesoulcard.common.interfaces.IUpgradableMenu;
 import com.mesoulcard.helper.SoulSurgeScreenHelper;
 import com.mesoulcard.widgets.SoulSurgeButton;
@@ -19,6 +27,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import net.neoforged.fml.ModList;
 
 @Mixin({AdvPatternProviderScreen.class})
 public abstract class AdvPatternProviderScreenMixin<P extends AdvPatternProviderMenu> extends AEBaseScreen<P> implements ISoulSurgeScreenAccessor {
@@ -36,6 +45,27 @@ public abstract class AdvPatternProviderScreenMixin<P extends AdvPatternProvider
     private void onInit(AdvPatternProviderMenu menu, Inventory playerInventory, Component title, ScreenStyle style, CallbackInfo ci) {
         meSoulCard$soulHelper = new SoulSurgeScreenHelper(this);
         meSoulCard$soulHelper.init();
+
+        if (!ModList.get().isLoaded("appflux") && menu instanceof IUpgradableMenu upgradableMenu) {
+            this.widgets.add("upgrades", new UpgradesPanel(menu.getSlots(SlotSemantics.UPGRADE)));
+
+            var sp = new SlotPosition();
+            sp.setBottom(84);
+            sp.setRight(1);
+            sp.setGrid(SlotGridLayout.BREAK_AFTER_3COLS);
+            var ws = new WidgetStyle();
+            ws.setRight(2);
+            ws.setBottom(90);
+            ws.setWidth(59);
+            ws.setHeight(66);
+            style.getSlots().put("TOOLBOX", sp);
+            ((IStyleAccessor) style).meSoulCard$getImages().put("toolbox",
+                    Blitter.texture("guis/extra_panels.png", 128, 128).src(69, 62, 59, 66));
+            ((IStyleAccessor) style).meSoulCard$getWidgets().put("toolbox", ws);
+            if (upgradableMenu.getToolbox().isPresent()) {
+                this.widgets.add("toolbox", new ToolboxPanel(style, upgradableMenu.getToolbox().getName()));
+            }
+        }
     }
 
     @Inject(method = "updateBeforeRender", at = @At("TAIL"))

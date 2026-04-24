@@ -9,6 +9,7 @@ import com.mesoulcard.common.interfaces.ISoulDistributor;
 import com.mesoulcard.common.interfaces.ISoulDistributorAccessor;
 import com.mesoulcard.common.SoulDistributor;
 import com.mesoulcard.core.Registration;
+import com.mesoulcard.helper.PatternProviderSoulSlotHelper;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import org.spongepowered.asm.mixin.Final;
@@ -33,7 +34,7 @@ public class PatternProviderLogicMixin implements IUpgradeableObject, ISoulDistr
         // Should not change the Block version of Pattern Provider. Only Parts can have Soul Distribution.
         if (host instanceof AEBasePart part) {
             this.meSoulCard$distributor = new SoulDistributor(this.mainNode,
-                    () -> getUpgrades().isInstalled(Registration.SOUL_CARD.get()),
+                    () -> PatternProviderSoulSlotHelper.hasUpgrade(this, Registration.SOUL_CARD.get()),
                     part);
             this.mainNode.addService(ISoulDistributor.class, this.meSoulCard$distributor);
         }
