@@ -21,7 +21,7 @@ public class SoulSurgeBlockEntityMixin {
                     .getValue(com.hrznstudio.titanium.block.RotatableBlock.FACING_ALL);
             BlockPos targetPos = pos.relative(facing.getOpposite());
 
-            if (SoulAccelerationManager.isLocked(targetPos)) {
+            if (SoulAccelerationManager.isLocked(level, targetPos)) {
                 ci.cancel();
             }
         }

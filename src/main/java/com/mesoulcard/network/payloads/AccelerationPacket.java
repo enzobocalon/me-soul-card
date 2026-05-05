@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 // Client -> Server
@@ -28,6 +29,9 @@ public record AccelerationPacket(int value) implements CustomPacketPayload {
 
             if (menu instanceof IAccelerationReceiver receiver) {
                 receiver.meSoulCard$receiveStates(packet.value());
+                if (context.player() instanceof ServerPlayer serverPlayer) {
+                    receiver.meSoulCard$syncClientState(serverPlayer);
+                }
             }
         });
     }

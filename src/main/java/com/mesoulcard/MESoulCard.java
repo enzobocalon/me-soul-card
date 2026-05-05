@@ -67,7 +67,7 @@ public class MESoulCard {
     public void onChunkUnload(ChunkEvent.Unload event) {
         // Clear locks for the unloading chunk to prevent stale cache entries
         if (!event.getLevel().isClientSide()) {
-            SoulAccelerationManager.clearChunk(event.getChunk().getPos());
+            SoulAccelerationManager.clearChunk((net.minecraft.world.level.Level) event.getLevel(), event.getChunk().getPos());
         }
     }
 }

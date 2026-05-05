@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.IdentityHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,7 +30,7 @@ public class SoulService implements IGridService, IGridServiceProvider {
         }
 
         lastProcessedTick = currentTick;
-        for (ISoulDistributor dis : this.active) {
+        for (ISoulDistributor dis : List.copyOf(this.active)) {
             if (dis.isActive()) {
                 dis.accelerate();
             } else {
