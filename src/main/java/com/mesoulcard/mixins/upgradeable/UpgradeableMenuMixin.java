@@ -34,12 +34,8 @@ public abstract class UpgradeableMenuMixin extends AEBaseMenu implements IAccele
     @Inject(method = "broadcastChanges", at = @At("TAIL"))
     private void broadcastChanges(CallbackInfo ci) {
         if (!this.getPlayer().level().isClientSide) {
-            int currentMultiplier = meSoulCard$getMultiplier();
-            boolean currentLocked = meSoulCard$isLocked();
-
             if (this.getPlayer() instanceof ServerPlayer serverPlayer) {
-                PacketDistributor.sendToPlayer(serverPlayer,
-                        new SyncAccelerationPacket(currentMultiplier, currentLocked));
+                this.meSoulCard$syncClientState(serverPlayer);
             }
         }
     }
@@ -168,6 +164,13 @@ public abstract class UpgradeableMenuMixin extends AEBaseMenu implements IAccele
             return;
 
         distributor.setAccelerationMultiplier(multiplier);
+    }
+
+    @Override
+    @Unique
+    public void meSoulCard$syncClientState(ServerPlayer player) {
+        PacketDistributor.sendToPlayer(player,
+                new SyncAccelerationPacket(meSoulCard$getMultiplier(), meSoulCard$isLocked()));
     }
 
     /*

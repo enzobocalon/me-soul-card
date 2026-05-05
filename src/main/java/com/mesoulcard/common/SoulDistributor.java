@@ -54,18 +54,21 @@ public class SoulDistributor implements ISoulDistributor {
     public void accelerate() {
         if (!hasUpgrade.getAsBoolean()) {
             releaseCurrentLock();
+            tickingTime = 0;
             return;
         }
 
         TargetInfo target = this.getTargetInfo();
         if (target == null) {
             releaseCurrentLock();
+            tickingTime = 0;
             return;
         }
 
         // Check if target is valid (has a block entity that can be accelerated)
         if (!isValidTarget(target)) {
             releaseCurrentLock();
+            tickingTime = 0;
             return;
         }
 
@@ -128,6 +131,7 @@ public class SoulDistributor implements ISoulDistributor {
                 }
             } else {
                 releaseCurrentLock();
+                tickingTime = 0;
             }
         }
     }
@@ -252,7 +256,7 @@ public class SoulDistributor implements ISoulDistributor {
         if (tag.contains("soulcard_multiplier")) {
             this.accelerationMultiplier = tag.getInt("soulcard_multiplier");
         }
-        if (tag.contains("ticking_time")) {
+        if (tag.contains("soulcard_ticking_time")) {
             this.tickingTime = tag.getInt("soulcard_ticking_time");
         }
     }
