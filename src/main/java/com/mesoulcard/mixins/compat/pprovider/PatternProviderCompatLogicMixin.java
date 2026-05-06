@@ -4,6 +4,7 @@ import appeng.api.networking.IManagedGridNode;
 import appeng.api.upgrades.IUpgradeInventory;
 import appeng.helpers.patternprovider.PatternProviderLogic;
 import appeng.helpers.patternprovider.PatternProviderLogicHost;
+import appeng.parts.AEBasePart;
 import com.mesoulcard.common.interfaces.IPatternProviderSoulSlotHost;
 import com.mesoulcard.helper.PatternProviderSoulSlotHelper;
 import com.mesoulcard.helper.SoulCardSlotInventory;
@@ -36,6 +37,10 @@ public class PatternProviderCompatLogicMixin implements IPatternProviderSoulSlot
     @Inject(method = "<init>(Lappeng/api/networking/IManagedGridNode;Lappeng/helpers/patternprovider/PatternProviderLogicHost;I)V", at = @At("TAIL"))
     private void meSoulCard$initSoulSlot(IManagedGridNode mainNode, PatternProviderLogicHost host, int patternInventorySize,
             CallbackInfo ci) {
+        if (!(host instanceof AEBasePart)) {
+            return;
+        }
+
         this.meSoulCard$soulUpgradeInventory = new SoulCardSlotInventory(
                 host.getTerminalIcon().getItem(),
                 this::meSoulCard$onSoulSlotChanged);

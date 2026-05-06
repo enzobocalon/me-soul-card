@@ -44,16 +44,18 @@ public class AdvPatternProviderLogicMixin implements IUpgradeableObject, ISoulDi
 
     @Inject(method = "<init>*", at = @At("TAIL"))
     private void init(IManagedGridNode node, AdvPatternProviderLogicHost host, int invSize, CallbackInfo ci) {
+        if (!(host instanceof AEBasePart part)) {
+            return;
+        }
+
         this.meSoulCard$soulUpgradeInventory = new SoulCardSlotInventory(
                 host.getTerminalIcon().getItem(),
                 this::meSoulCard$onSoulSlotChanged);
 
-        if (host instanceof AEBasePart part) {
-            this.meSoulCard$distributor = new SoulDistributor(this.mainNode,
-                    () -> PatternProviderSoulSlotHelper.hasUpgrade(this, Registration.SOUL_CARD.get()),
-                    part);
-            this.mainNode.addService(ISoulDistributor.class, this.meSoulCard$distributor);
-        }
+        this.meSoulCard$distributor = new SoulDistributor(this.mainNode,
+                () -> PatternProviderSoulSlotHelper.hasUpgrade(this, Registration.SOUL_CARD.get()),
+                part);
+        this.mainNode.addService(ISoulDistributor.class, this.meSoulCard$distributor);
     }
 
     @Unique

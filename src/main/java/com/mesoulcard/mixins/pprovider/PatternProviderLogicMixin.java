@@ -20,6 +20,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+// Handles distributor only.
 @Mixin({ PatternProviderLogic.class })
 public class PatternProviderLogicMixin implements IUpgradeableObject, ISoulDistributorAccessor {
     @Shadow

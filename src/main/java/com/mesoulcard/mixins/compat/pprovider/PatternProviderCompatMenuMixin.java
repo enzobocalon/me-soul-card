@@ -9,6 +9,7 @@ import appeng.menu.SlotSemantics;
 import appeng.menu.ToolboxMenu;
 import appeng.menu.implementations.PatternProviderMenu;
 import appeng.menu.slot.RestrictedInputSlot;
+import appeng.parts.AEBasePart;
 import com.mesoulcard.common.interfaces.IPatternProviderSoulSlotHost;
 import com.mesoulcard.common.interfaces.IPatternProviderSoulSlotMenu;
 import com.mesoulcard.common.interfaces.IUpgradableMenu;
@@ -54,6 +55,10 @@ public abstract class PatternProviderCompatMenuMixin extends AEBaseMenu
     private void meSoulCard$addSoulSlot(MenuType<?> menuType, int id, Inventory playerInventory, PatternProviderLogicHost host,
             CallbackInfo ci) {
         this.meSoulCard$toolbox = new ToolboxMenu(this);
+        if (!(host instanceof AEBasePart)) {
+            return;
+        }
+
         var soulInv = this.meSoulCard$getSoulUpgradeInventory();
         var slot = new RestrictedInputSlot(RestrictedInputSlot.PlacableItemType.UPGRADES, soulInv, 0) {
             @Override
@@ -77,14 +82,20 @@ public abstract class PatternProviderCompatMenuMixin extends AEBaseMenu
     }
 
     @Override
+    public boolean meSoulCard$hasSoulSlot() {
+        return this.meSoulCard$soulUpgradeSlot != null && this.meSoulCard$getSoulUpgradeInventory() != null;
+    }
+
+    @Override
     public IUpgradeInventory meSoulCard$getUpgrades() {
-        return this.meSoulCard$getSoulUpgradeInventory();
+        return ((IUpgradeableObject) this.logic).getUpgrades();
     }
 
     @Override
     public boolean meSoulCard$hasUpgrade(ItemLike upgradeCard) {
+        var soulInventory = this.meSoulCard$getSoulUpgradeInventory();
         return ((IUpgradeableObject) this.logic).getUpgrades().isInstalled(upgradeCard)
-                || this.meSoulCard$getSoulUpgradeInventory().isInstalled(upgradeCard);
+                || soulInventory != null && soulInventory.isInstalled(upgradeCard);
     }
 
     @Override

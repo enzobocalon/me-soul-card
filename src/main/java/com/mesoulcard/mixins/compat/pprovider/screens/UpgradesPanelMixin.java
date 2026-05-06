@@ -41,6 +41,10 @@ public abstract class UpgradesPanelMixin {
             return;
         }
 
+        if (!soulMenu.meSoulCard$hasSoulSlot()) {
+            return;
+        }
+
         Slot hoveredUpgradeSlot = null;
         for (var slot : this.slots) {
             if (!slot.isActive()) {

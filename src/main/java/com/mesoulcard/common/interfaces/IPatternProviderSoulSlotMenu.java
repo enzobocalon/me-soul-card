@@ -7,6 +7,8 @@ import net.minecraft.world.level.ItemLike;
 public interface IPatternProviderSoulSlotMenu {
     IUpgradeInventory meSoulCard$getSoulUpgradeInventory();
 
+    boolean meSoulCard$hasSoulSlot();
+
     boolean meSoulCard$hasUpgrade(ItemLike upgradeCard);
 
     boolean meSoulCard$isSoulSlot(Slot slot);
