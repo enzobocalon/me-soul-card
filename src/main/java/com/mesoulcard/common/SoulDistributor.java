@@ -65,7 +65,6 @@ public class SoulDistributor implements ISoulDistributor {
             return;
         }
 
-        // Check if target is valid (has a block entity that can be accelerated)
         if (!isValidTarget(target)) {
             releaseCurrentLock();
             tickingTime = 0;
@@ -84,18 +83,7 @@ public class SoulDistributor implements ISoulDistributor {
     }
 
     private boolean isValidTarget(TargetInfo target) {
-        if (!target.level().isLoaded(target.pos())) {
-            return false;
-        }
-
-        BlockState state = target.state();
-        if (state.isAir()) {
-            return false;
-        }
-
-        // Check if there's a block entity with a ticker
-        BlockEntity be = target.level().getBlockEntity(target.pos());
-        return be != null;
+        return SoulAccelerationHelper.canAccelerateTarget(target.level(), target.pos(), target.state());
     }
 
     private void tickAccelerate(TargetInfo target) {
@@ -108,7 +96,7 @@ public class SoulDistributor implements ISoulDistributor {
             if (MESoulCard.isDebugLogEnabled()) {
                 accelerationStartTime = System.nanoTime();
                 ticksAccelerated = 0;
-                System.out.println("[SoulDistributor] Starting acceleration cycle");
+                MESoulCard.LOGGER.debug("[SoulDistributor] Starting acceleration cycle");
             }
         }
 
@@ -126,8 +114,8 @@ public class SoulDistributor implements ISoulDistributor {
                 }
                 if (tickingTime == 0 && MESoulCard.isDebugLogEnabled()) {
                     long elapsed = (System.nanoTime() - accelerationStartTime) / 1_000_000;
-                    System.out.printf("[SoulDistributor] Ticks: %d | Elapsed: %dms | Avg: %.2fms/tick%n",
-                            ticksAccelerated, elapsed, elapsed / (double)ticksAccelerated);
+                    MESoulCard.LOGGER.debug("[SoulDistributor] Ticks: {} | Elapsed: {}ms | Avg: {}ms/tick",
+                            ticksAccelerated, elapsed, elapsed / (double) ticksAccelerated);
                 }
             } else {
                 releaseCurrentLock();
@@ -168,22 +156,28 @@ public class SoulDistributor implements ISoulDistributor {
             return false;
 
         var inv = storageService.getInventory();
+        long available = inv.extract(
+                SoulKey.INSTANCE,
+                accelerationMultiplier,
+                Actionable.SIMULATE,
+                actionSource);
+
+        if (available < accelerationMultiplier) {
+            return false;
+        }
+
         long extracted = inv.extract(
                 SoulKey.INSTANCE,
                 accelerationMultiplier,
                 Actionable.MODULATE,
                 actionSource);
 
-        return extracted >= 1;
+        return extracted >= accelerationMultiplier;
     }
 
     @Override
     public void setAccelerationMultiplier(int multiplier) {
-        if (multiplier >= 1 && multiplier <= 6) {
-            this.accelerationMultiplier = multiplier;
-        } else if (multiplier > 6) {
-            this.accelerationMultiplier = 1;
-        }
+        this.accelerationMultiplier = normalizeMultiplier(multiplier);
 
         if (this.part.getHost() != null) {
             this.part.getHost().markForSave();
@@ -193,6 +187,10 @@ public class SoulDistributor implements ISoulDistributor {
     @Override
     public int getAccelerationMultiplier() {
         return this.accelerationMultiplier;
+    }
+
+    private int normalizeMultiplier(int multiplier) {
+        return multiplier >= 1 && multiplier <= 6 ? multiplier : 1;
     }
 
     @Override
@@ -254,7 +252,7 @@ public class SoulDistributor implements ISoulDistributor {
 
     public void readFromNBT(CompoundTag tag, HolderLookup.Provider registries) {
         if (tag.contains("soulcard_multiplier")) {
-            this.accelerationMultiplier = tag.getInt("soulcard_multiplier");
+            this.accelerationMultiplier = normalizeMultiplier(tag.getInt("soulcard_multiplier"));
         }
         if (tag.contains("soulcard_ticking_time")) {
             this.tickingTime = tag.getInt("soulcard_ticking_time");

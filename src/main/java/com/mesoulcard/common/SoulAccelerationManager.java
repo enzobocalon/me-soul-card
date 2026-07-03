@@ -24,18 +24,13 @@ public class SoulAccelerationManager {
       return true;
     }
 
-    if (level == null || level.isClientSide())
+    if (level == null || level.isClientSide() || targetPos == null || distributorId == null)
       return false;
 
     var key = new LockKey(level.dimension(), targetPos.immutable());
-
-    // Fast path: check cache first
-    String currentOwner = lockCache.get(key);
+    String currentOwner = lockCache.putIfAbsent(key, distributorId);
 
     if (currentOwner == null) {
-      // No lock exists - acquire it
-      lockCache.put(key, distributorId);
-
       if (MESoulCard.isDebugLogEnabled()) {
         MESoulCard.LOGGER.debug("[SoulAccelerationManager] {} acquired lock on {}",
             distributorId, targetPos.toShortString());
@@ -66,7 +61,7 @@ public class SoulAccelerationManager {
     if (targetPos == null)
       return;
 
-    var key = new LockKey(level.dimension(), targetPos);
+    var key = new LockKey(level.dimension(), targetPos.immutable());
     String currentOwner = lockCache.get(key);
 
     if (distributorId.equals(currentOwner)) {
@@ -85,10 +80,10 @@ public class SoulAccelerationManager {
    * skip acceleration.
    */
   public static boolean isLocked(Level level, BlockPos targetPos) {
-    if (level == null || targetPos == null) {
+    if (!Config.ENABLE_ACCELERATION_LOCK.get() || level == null || targetPos == null) {
       return false;
     }
-    return lockCache.containsKey(new LockKey(level.dimension(), targetPos));
+    return lockCache.containsKey(new LockKey(level.dimension(), targetPos.immutable()));
   }
 
   /*

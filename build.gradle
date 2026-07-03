@@ -156,7 +156,10 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
             mod_authors            : mod_authors,
             mod_description        : mod_description,
             ae2_version : ae2_version,
-            soulplied_energistics_version: soulplied_energistics_version_build
+            soulplied_energistics_version: soulplied_energistics_version_build,
+            industrial_foregoing_version: industrial_foregoing_version,
+            industrial_foregoing_souls_mod_version: industrial_foregoing_souls_mod_version,
+            titanium_mod_version: titanium_mod_version
     ]
     inputs.properties replaceProperties
     expand replaceProperties
@@ -196,10 +199,15 @@ processResources {
             mod_authors: mod_authors,
             mod_description: mod_description,
             ae2_version : ae2_version,
-            soulplied_energistics_version: soulplied_energistics_version_build
+            soulplied_energistics_version: soulplied_energistics_version_build,
+            industrial_foregoing_version: industrial_foregoing_version,
+            industrial_foregoing_souls_mod_version: industrial_foregoing_souls_mod_version,
+            titanium_mod_version: titanium_mod_version
     ]
 
     inputs.properties replaceProperties
+
+    exclude '**/*.psd'
 
     filesMatching(['META-INF/neoforge.mods.toml']) {
         expand replaceProperties

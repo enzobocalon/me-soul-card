@@ -65,15 +65,36 @@ config="${mod_id}.mixins.json"
 
 [[dependencies.${mod_id}]]
 modId="ae2"
-mandatory = true
+type="required"
 versionRange="[${ae2_version},)"
 ordering="NONE"
 side="BOTH"
 
 [[dependencies.${mod_id}]]
 modId="soulplied_energistics"
-mandatory = true
+type="required"
 versionRange="[${soulplied_energistics_version},)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="industrialforegoing"
+type="required"
+versionRange="[${industrial_foregoing_version},)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="industrialforegoingsouls"
+type="required"
+versionRange="[${industrial_foregoing_souls_mod_version},)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="titanium"
+type="required"
+versionRange="[${titanium_mod_version},)"
 ordering="NONE"
 side="BOTH"
 

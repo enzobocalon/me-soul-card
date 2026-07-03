@@ -7,22 +7,19 @@ import appeng.menu.SlotSemantics;
 import appeng.menu.ToolboxMenu;
 import appeng.menu.slot.RestrictedInputSlot;
 import appeng.parts.AEBasePart;
-import com.mesoulcard.common.SoulService;
 import com.mesoulcard.common.interfaces.IAccelerationReceiver;
 import com.mesoulcard.common.interfaces.IPatternProviderSoulSlotHost;
 import com.mesoulcard.common.interfaces.IPatternProviderSoulSlotMenu;
 import com.mesoulcard.common.interfaces.IUpgradableMenu;
-import com.mesoulcard.common.interfaces.ISoulDistributorAccessor;
 import com.mesoulcard.core.ModConstants;
 import com.mesoulcard.core.Registration;
-import com.mesoulcard.network.payloads.SyncAccelerationPacket;
+import com.mesoulcard.helper.AccelerationMenuHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-import net.neoforged.neoforge.network.PacketDistributor;
 import net.pedroksl.advanced_ae.common.logic.AdvPatternProviderLogic;
 import net.pedroksl.advanced_ae.common.logic.AdvPatternProviderLogicHost;
 import net.pedroksl.advanced_ae.gui.advpatternprovider.AdvPatternProviderMenu;
@@ -88,115 +85,19 @@ public class AdvPatternProviderMenuMixin extends AEBaseMenu
         }
     }
 
-    @Unique
-    private int meSoulCard$getMultiplier() {
-        if (this.logic instanceof ISoulDistributorAccessor accessor) {
-            var distributor = accessor.meSoulCard$getDistributor();
-            if (distributor != null) {
-                return distributor.getAccelerationMultiplier();
-            }
-        }
-
-        // Fallback to grid service
-        var host = this.getActionHost();
-        if (!(host instanceof AEBasePart part))
-            return 1;
-
-        var mainNode = part.getMainNode();
-        if (!mainNode.isActive())
-            return 1;
-
-        var grid = mainNode.getGrid();
-        if (grid == null)
-            return 1;
-
-        var service = grid.getService(SoulService.class);
-        if (service == null)
-            return 1;
-
-        var distributor = service.getDistributor(mainNode.getNode());
-        if (distributor == null)
-            return 1;
-
-        return distributor.getAccelerationMultiplier();
-    }
-
-    @Unique
-    private boolean meSoulCard$isLocked() {
-        if (this.logic instanceof ISoulDistributorAccessor accessor) {
-            var distributor = accessor.meSoulCard$getDistributor();
-            if (distributor != null) {
-                return distributor.isLocked();
-            }
-        }
-
-        // Fallback to grid service
-        var host = this.getActionHost();
-        if (!(host instanceof AEBasePart part))
-            return false;
-
-        var mainNode = part.getMainNode();
-        if (!mainNode.isActive())
-            return false;
-
-        var grid = mainNode.getGrid();
-        if (grid == null)
-            return false;
-
-        var service = grid.getService(SoulService.class);
-        if (service == null)
-            return false;
-
-        var distributor = service.getDistributor(mainNode.getNode());
-        if (distributor == null)
-            return false;
-
-        return distributor.isLocked();
-    }
-
     /*
      * Receive from client in server
      */
     @Override
     @Unique
     public void meSoulCard$receiveStates(int multiplier) {
-        if (this.logic instanceof ISoulDistributorAccessor accessor) {
-            var distributor = accessor.meSoulCard$getDistributor();
-            if (distributor != null) {
-                distributor.setAccelerationMultiplier(multiplier);
-                return;
-            }
-        }
-
-        // Fallback to grid service
-        var host = this.getActionHost();
-        if (!(host instanceof AEBasePart part))
-            return;
-
-        var mainNode = part.getMainNode();
-        if (!mainNode.isActive())
-            return;
-
-        var grid = mainNode.getGrid();
-        if (grid == null)
-            return;
-
-        var service = grid.getService(SoulService.class);
-        if (service == null)
-            return;
-
-        var distributor = service.getDistributor(mainNode.getNode());
-        if (distributor == null)
-            return;
-
-        distributor.setAccelerationMultiplier(multiplier);
+        AccelerationMenuHelper.setMultiplier(this.logic, this.getActionHost(), multiplier);
     }
 
     @Override
     @Unique
     public void meSoulCard$syncClientState(ServerPlayer player) {
-        PacketDistributor.sendToPlayer(player,
-                new SyncAccelerationPacket(meSoulCard$getMultiplier(), meSoulCard$isLocked()));
+        AccelerationMenuHelper.syncClientState(player, this.logic, this.getActionHost());
     }
 
     /*

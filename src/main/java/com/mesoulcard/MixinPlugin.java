@@ -1,7 +1,5 @@
 package com.mesoulcard;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.LoadingModList;
 import net.neoforged.fml.loading.moddiscovery.ModInfo;
@@ -10,38 +8,41 @@ import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class MixinPlugin implements IMixinConfigPlugin {
-    // Enabled when B mods are loaded
-    public static final Object2ObjectMap<String, List<String>> mixinMapEnableCompat = new Object2ObjectOpenHashMap<>(
-            new String[] {
-                    "com.mesoulcard.mixins.compat.pprovider.screens.AppFluxPatternProviderScreenMixin",
-                    "com.mesoulcard.mixins.compat.pprovider.screens.ExpandedAEPatternProviderScreenMixin",
+    private static final Map<String, List<String>> COMPAT_MIXINS = Map.ofEntries(
+            extendedAe("compat.aeinterface.extendedae.GuiExInterfaceMixin"),
+            extendedAe("compat.io.extendedae.GuiExIOBusMixin"),
+            extendedAe("compat.pprovider.PartExPatternProviderMixin"),
 
-                    "com.mesoulcard.mixins.compat.io.extendedae.GuiExIOBusMixin",
+            advancedAe("compat.io.advancedae.ImportExportBusScreenMixin"),
+            advancedAe("compat.io.advancedae.StockExportBusScreenMixin"),
+            advancedAe("compat.pprovider.advancedae.AdvPatternProviderLogicHostMixin"),
+            advancedAe("compat.pprovider.advancedae.AdvPatternProviderLogicMixin"),
+            advancedAe("compat.pprovider.advancedae.AdvPatternProviderMenuMixin"),
+            advancedAe("compat.pprovider.advancedae.AdvPatternProviderPartMixin"),
+            advancedAe("compat.pprovider.advancedae.AdvPatternProviderScreenMixin"),
+            advancedAe("compat.pprovider.advancedae.SmallAdvPatternProviderScreenMixin"),
 
-                    "com.mesoulcard.mixins.compat.pprovider.advancedae.AdvPatternProviderLogicHostMixin",
-                    "com.mesoulcard.mixins.compat.pprovider.advancedae.AdvPatternProviderScreenMixin",
-                    "com.mesoulcard.mixins.compat.pprovider.advancedae.AdvPatternProviderMenuMixin",
-                    "com.mesoulcard.mixins.compat.pprovider.advancedae.AdvPatternProviderLogicMixin",
-                    "com.mesoulcard.mixins.compat.pprovider.advancedae.AdvPatternProviderPartMixin",
+            compat("compat.pprovider.screens.AppFluxPatternProviderScreenMixin", "appflux"),
+            compat("compat.pprovider.screens.AppFluxAdvPatternProviderScreenMixin", "advanced_ae", "appflux"),
+            compat("compat.pprovider.screens.AppFluxSmallAdvPatternProviderScreenMixin", "advanced_ae", "appflux"),
+            compat("compat.pprovider.screens.ExpandedAEPatternProviderScreenMixin", "expandedae")
+    );
 
-                    "com.mesoulcard.mixins.compat.pprovider.screens.AppFluxAdvPatternProviderScreenMixin",
-                    "com.mesoulcard.mixins.compat.pprovider.screens.AppFluxSmallAdvPatternProviderScreenMixin"
-            },
-            new List[] {
-                    List.of("appflux"),
-                    List.of("expandedae"),
-                    List.of("extendedae"),
-                    List.of("advanced_ae"),
-                    List.of("advanced_ae"),
-                    List.of("advanced_ae"),
-                    List.of("advanced_ae"),
-                    List.of("advanced_ae"),
-                    List.of("advanced_ae", "appflux"),
-                    List.of("advanced_ae", "appflux")
-            });
+    private static Map.Entry<String, List<String>> extendedAe(String mixinClassName) {
+        return compat(mixinClassName, "extendedae");
+    }
+
+    private static Map.Entry<String, List<String>> advancedAe(String mixinClassName) {
+        return compat(mixinClassName, "advanced_ae");
+    }
+
+    private static Map.Entry<String, List<String>> compat(String mixinClassName, String... requiredMods) {
+        return Map.entry("com.mesoulcard.mixins." + mixinClassName, List.of(requiredMods));
+    }
 
     private boolean isModLoaded(String modId) {
         if (ModList.get() == null) {
@@ -64,8 +65,8 @@ public class MixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (mixinMapEnableCompat.containsKey(mixinClassName)) {
-            return mixinMapEnableCompat.get(mixinClassName).stream().allMatch(this::isModLoaded);
+        if (COMPAT_MIXINS.containsKey(mixinClassName)) {
+            return COMPAT_MIXINS.get(mixinClassName).stream().allMatch(this::isModLoaded);
         }
 
         return true;
